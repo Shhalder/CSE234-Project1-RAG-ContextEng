@@ -1,4 +1,5 @@
 from pathlib import Path
+import pickle
 import faiss
 import numpy as np
 from sentence_transformers import SentenceTransformer
@@ -46,5 +47,18 @@ class EmbedIndex:
                 top_k_vectors.append(self.chunks[i])
 
         return top_k_vectors
+    
+    def save(self, save_dir: Path):
+        save_dir.mkdir(parents=True, exist_ok=True)
+        faiss.write_index(self.index, str(save_dir / "faiss.index"))
+        with open(save_dir / "chunks.pkl", "wb") as f:
+            pickle.dump(self.chunks, f)
+        print(f"Index saved to {save_dir}")
+
+    def load(self, save_dir: Path) -> None:
+        self.index = faiss.read_index(str(save_dir / "faiss.index"))
+        with open(save_dir / "chunks.pkl", "rb") as f:
+            self.chunks = pickle.load(f)
+        print(f"Index loaded from {save_dir} ({self.index.ntotal} vectors)")
                 
     
