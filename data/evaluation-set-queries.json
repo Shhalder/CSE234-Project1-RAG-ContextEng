@@ -1,0 +1,182 @@
+[
+{
+"id": 1,
+"tuple": {
+"doc_topic": "configs.rst",
+"question_type": "factual lookup",
+"scenario": "exact match"
+},
+"question": "For the Range(start, end, dtype) knob generator, what dtype values are allowed and what sampling behavior is stated for values inside the interval?"
+},
+{
+"id": 2,
+"tuple": {
+"doc_topic": "experiment.rst",
+"question_type": "factual lookup",
+"scenario": "constrained edge case"
+},
+"question": "If you run run_evals() on a machine with no GPUs, what does the docs say about choosing num_actors (default behavior and recommended maximum)?"
+},
+{
+"id": 3,
+"tuple": {
+"doc_topic": "promptothers.rst",
+"question_type": "factual lookup",
+"scenario": "exact match"
+},
+"question": "Which two LangChain selector classes are explicitly allowed for RFPromptManager.example_selector_cls?"
+},
+{
+"id": 4,
+"tuple": {
+"doc_topic": "generators.rst",
+"question_type": "factual lookup",
+"scenario": "exact match"
+},
+"question": "In RFOpenAIAPIModelConfig, which two rate-limit fields are provided for API throttling, and what units are they measured in?"
+},
+{
+"id": 5,
+"tuple": {
+"doc_topic": "dashboard.rst",
+"question_type": "factual lookup",
+"scenario": "synthesis"
+},
+"question": "In the dashboard Chart view, what does the x-axis Step represent for minibatch-level plots versus epoch-level plots, and how does that explain curves ending at different step counts across runs?"
+},
+{
+"id": 6,
+"tuple": {
+"doc_topic": "overview.rst",
+"question_type": "conceptual explanation",
+"scenario": "exact match"
+},
+"question": "What does RapidFire mean by \"live three-way communication\", and which three components are involved?"
+},
+{
+"id": 7,
+"tuple": {
+"doc_topic": "onlineagg.rst",
+"question_type": "conceptual explanation",
+"scenario": "constrained edge case"
+},
+"question": "If a custom eval metric is returned without algebraic/distributive type metadata, how does online aggregation treat it and why?"
+},
+{
+"id": 8,
+"tuple": {
+"doc_topic": "difference.rst",
+"question_type": "conceptual explanation",
+"scenario": "synthesis"
+},
+"question": "How does the adaptive execution engine let you observe all configs earlier than sequential execution, and what overhead tradeoff is documented?"
+},
+{
+"id": 9,
+"tuple": {
+"doc_topic": "glossary.rst",
+"question_type": "conceptual explanation",
+"scenario": "exact match"
+},
+"question": "According to the glossary, how is a \"config group generator\" different from a \"config group\" in RapidFire workflows?"
+},
+{
+"id": 10,
+"tuple": {
+"doc_topic": "ragspecs.rst",
+"question_type": "conceptual explanation",
+"scenario": "constrained edge case"
+},
+"question": "In a RAG setup where no retriever and no vector_store_cfg are supplied but preprocessing is needed, what defaults are created automatically, and which inputs remain required versus optional?"
+},
+{
+"id": 11,
+"tuple": {
+"doc_topic": "troubleshooting.rst",
+"question_type": "procedural how-to",
+"scenario": "exact match"
+},
+"question": "What is the documented way to run RapidFire using only GPU indices 0 and 2, including when that environment variable must be set?"
+},
+{
+"id": 12,
+"tuple": {
+"doc_topic": "walkthroughrag.rst",
+"question_type": "procedural how-to",
+"scenario": "constrained edge case"
+},
+"question": "For a RAG eval workflow that uses only OpenAI APIs, what initialization command should you run, and under what condition can you skip starting the RapidFire server?"
+},
+{
+"id": 13,
+"tuple": {
+"doc_topic": "walkthroughft.rst",
+"question_type": "procedural how-to",
+"scenario": "synthesis"
+},
+"question": "After installing in a fresh venv, what sequence of commands does the fine-tuning walkthrough prescribe to initialize and start services, and when should rapidfireai init be rerun?"
+},
+{
+"id": 14,
+"tuple": {
+"doc_topic": "fitfunctions.rst",
+"question_type": "procedural how-to",
+"scenario": "constrained edge case"
+},
+"question": "If your GRPO reward function only needs completions, what function-signature pattern does the docs recommend to stay compatible with TRL-injected arguments, and what return type is required?"
+},
+{
+"id": 15,
+"tuple": {
+"doc_topic": "issues.rst",
+"question_type": "procedural how-to",
+"scenario": "exact match"
+},
+"question": "When a human is not in the loop, what does the issues page recommend instead of manual dashboard IC Ops triggering, and what run information should that code use?"
+},
+{
+"id": 16,
+"tuple": {
+"doc_topic": "trainers.rst",
+"question_type": "comparative",
+"scenario": "synthesis"
+},
+"question": "How does trainers.rst contrast FSDP support between RFDPOConfig and RFGRPOConfig as of this writing?"
+},
+{
+"id": 17,
+"tuple": {
+"doc_topic": "tutorials.rst",
+"question_type": "comparative",
+"scenario": "exact match"
+},
+"question": "How does the tutorials page split examples between RAG/context-engineering and fine-tuning/post-training, and which control flows are listed in the latter section?"
+},
+{
+"id": 18,
+"tuple": {
+"doc_topic": "walkthroughft.rst",
+"question_type": "comparative",
+"scenario": "constrained edge case"
+},
+"question": "If you must choose between Google Colab and Full Installation for SFT/RFT, how does the docs compare their setup time and capability limits?"
+},
+{
+"id": 19,
+"tuple": {
+"doc_topic": "ragspecs.rst",
+"question_type": "comparative",
+"scenario": "synthesis"
+},
+"question": "In RFLangChainRagSpec, how are Create, Read, and Update vector-store modes determined by whether document_loader and pre-existing index or collection identifiers are provided?"
+},
+{
+"id": 20,
+"tuple": {
+"doc_topic": "dashboard.rst",
+"question_type": "comparative",
+"scenario": "constrained edge case"
+},
+"question": "If a team wants the new dashboard capabilities described on this page, how does support differ between RapidFire's MLflow-fork dashboard and TensorBoard/Trackio?"
+}
+]

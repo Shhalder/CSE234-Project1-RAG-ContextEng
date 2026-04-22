@@ -1,0 +1,172 @@
+[
+{
+"question_id": 1,
+"question": "For the Range(start, end, dtype) knob generator, what dtype values are allowed and what sampling behavior is stated for values inside the interval?",
+"reference_answer": "Range() allows dtype values \"int\" or \"float\", and it performs uniform sampling within the specified interval.",
+"source_evidence": [
+{"file": "configs.rst", "lines": [33, 42]},
+{"file": "configs.rst", "lines": [47, 47]}
+]
+},
+{
+"question_id": 2,
+"question": "If you run run_evals() on a machine with no GPUs, what does the docs say about choosing num_actors (default behavior and recommended maximum)?",
+"reference_answer": "For run_evals(), num_actors defaults to the number of GPUs. On a machine with no GPUs, the docs recommend a maximum of 16 actors.",
+"source_evidence": [
+{"file": "experiment.rst", "lines": [151, 152]}
+]
+},
+{
+"question_id": 3,
+"question": "Which two LangChain selector classes are explicitly allowed for RFPromptManager.example_selector_cls?",
+"reference_answer": "The two allowed classes are SemanticSimilarityExampleSelector and MaxMarginalRelevanceExampleSelector.",
+"source_evidence": [
+{"file": "promptothers.rst", "lines": [30, 31]}
+]
+},
+{
+"question_id": 4,
+"question": "In RFOpenAIAPIModelConfig, which two rate-limit fields are provided for API throttling, and what units are they measured in?",
+"reference_answer": "The fields are rpm_limit (requests per minute) and tpm_limit (tokens per minute).",
+"source_evidence": [
+{"file": "generators.rst", "lines": [111, 115]}
+]
+},
+{
+"question_id": 5,
+"question": "In the dashboard Chart view, what does the x-axis Step represent for minibatch-level plots versus epoch-level plots, and how does that explain curves ending at different step counts across runs?",
+"reference_answer": "For minibatch-level plots, Step is the absolute number of minibatches seen by a run; for epoch-level plots, Step is the absolute number of epochs seen. So runs with different batch_size or epochs settings naturally have different step counts and their curves do not align to the same endpoint.",
+"source_evidence": [
+{"file": "dashboard.rst", "lines": [67, 70]}
+]
+},
+{
+"question_id": 6,
+"question": "What does RapidFire mean by \"live three-way communication\", and which three components are involved?",
+"reference_answer": "It means RapidFire AI connects three live components during experimentation: the IDE where the experiment is launched, a metrics display/control dashboard, and a multi-core/multi-GPU execution backend.",
+"source_evidence": [
+{"file": "overview.rst", "lines": [13, 14]}
+]
+},
+{
+"question_id": 7,
+"question": "If a custom eval metric is returned without algebraic/distributive type metadata, how does online aggregation treat it and why?",
+"reference_answer": "Metrics without a defined type are shown as-is, without projected estimates or confidence intervals, because online aggregation requires type metadata (algebraic/distributive) and value range to compute those projections.",
+"source_evidence": [
+{"file": "onlineagg.rst", "lines": [71, 74]}
+]
+},
+{
+"question_id": 8,
+"question": "How does the adaptive execution engine let you observe all configs earlier than sequential execution, and what overhead tradeoff is documented?",
+"reference_answer": "RapidFire shards the dataset and schedules all runs one shard at a time, cycling through shards instead of finishing one run end-to-end first. This exposes early behavior for all configs sooner (e.g., seeing all three configs on early chunks before config 3 would even start sequentially), with documented swapping overhead below 5% runtime.",
+"source_evidence": [
+{"file": "difference.rst", "lines": [4, 9]},
+{"file": "difference.rst", "lines": [21, 24]}
+]
+},
+{
+"question_id": 9,
+"question": "According to the glossary, how is a \"config group generator\" different from a \"config group\" in RapidFire workflows?",
+"reference_answer": "A config group is the resulting set/list of config dictionaries to run, while a config group generator is the method that produces that group from a config dictionary with set-valued knobs (currently RFGridSearch or RFRandomSearch).",
+"source_evidence": [
+{"file": "glossary.rst", "lines": [31, 34]},
+{"file": "glossary.rst", "lines": [41, 44]}
+]
+},
+{
+"question_id": 10,
+"question": "In a RAG setup where no retriever and no vector_store_cfg are supplied but preprocessing is needed, what defaults are created automatically, and which inputs remain required versus optional?",
+"reference_answer": "RapidFire automatically builds a default FAISS vector store and retriever from documents. In that case, document_loader is required, while text_splitter remains optional (you can embed whole documents without chunking).",
+"source_evidence": [
+{"file": "ragspecs.rst", "lines": [372, 372]}
+]
+},
+{
+"question_id": 11,
+"question": "What is the documented way to run RapidFire using only GPU indices 0 and 2, including when that environment variable must be set?",
+"reference_answer": "Set CUDA_VISIBLE_DEVICES before running rapidfireai start. For GPUs 0 and 2, the docs show exporting CUDA_VISIBLE_DEVICES=0,2 and then starting RapidFire.",
+"source_evidence": [
+{"file": "troubleshooting.rst", "lines": [55, 67]}
+]
+},
+{
+"question_id": 12,
+"question": "For a RAG eval workflow that uses only OpenAI APIs, what initialization command should you run, and under what condition can you skip starting the RapidFire server?",
+"reference_answer": "Use rapidfireai init --evals. For run_evals() workflows, starting the server is optional and can be skipped if you do not need dashboard visualization, since results and IC Ops can be used in-notebook.",
+"source_evidence": [
+{"file": "walkthroughrag.rst", "lines": [66, 71]},
+{"file": "walkthroughrag.rst", "lines": [102, 104]}
+]
+},
+{
+"question_id": 13,
+"question": "After installing in a fresh venv, what sequence of commands does the fine-tuning walkthrough prescribe to initialize and start services, and when should rapidfireai init be rerun?",
+"reference_answer": "The walkthrough shows creating/activating a Python 3.12 venv, installing rapidfireai, then running rapidfireai init followed by rapidfireai start. It says init is needed only once per new venv or when switching GPUs, not after reboot/start-stop/new terminal.",
+"source_evidence": [
+{"file": "walkthroughft.rst", "lines": [41, 47]},
+{"file": "walkthroughft.rst", "lines": [88, 93]},
+{"file": "walkthroughft.rst", "lines": [100, 100]}
+]
+},
+{
+"question_id": 14,
+"question": "If your GRPO reward function only needs completions, what function-signature pattern does the docs recommend to stay compatible with TRL-injected arguments, and what return type is required?",
+"reference_answer": "The docs recommend using a subset signature (e.g., completions) while still including **kwargs to stay compatible with TRL-injected arguments. Reward functions must return a list of floats (one per completion), or None when not applicable.",
+"source_evidence": [
+{"file": "fitfunctions.rst", "lines": [220, 223]},
+{"file": "fitfunctions.rst", "lines": [232, 234]}
+]
+},
+{
+"question_id": 15,
+"question": "When a human is not in the loop, what does the issues page recommend instead of manual dashboard IC Ops triggering, and what run information should that code use?",
+"reference_answer": "It recommends semi-automating IC Ops in code (instead of manual dashboard triggering), with application logic driven by runs' metrics and progress so far.",
+"source_evidence": [
+{"file": "issues.rst", "lines": [59, 65]}
+]
+},
+{
+"question_id": 16,
+"question": "How does trainers.rst contrast FSDP support between RFDPOConfig and RFGRPOConfig as of this writing?",
+"reference_answer": "trainers.rst says DPO supports specifying FSDP configuration (similar to SFT), while out-of-the-box FSDP support for GRPO is still in progress.",
+"source_evidence": [
+{"file": "trainers.rst", "lines": [146, 146]},
+{"file": "trainers.rst", "lines": [210, 211]}
+]
+},
+{
+"question_id": 17,
+"question": "How does the tutorials page split examples between RAG/context-engineering and fine-tuning/post-training, and which control flows are listed in the latter section?",
+"reference_answer": "The page separates tutorials into a RAG/context-engineering section and a fine-tuning/post-training section. In the latter, it lists one example each for SFT, DPO, and GRPO.",
+"source_evidence": [
+{"file": "tutorials.rst", "lines": [8, 13]},
+{"file": "tutorials.rst", "lines": [27, 31]}
+]
+},
+{
+"question_id": 18,
+"question": "If you must choose between Google Colab and Full Installation for SFT/RFT, how does the docs compare their setup time and capability limits?",
+"reference_answer": "Google Colab is described as near-zero local setup and under 3 minutes, but limited by free T4 resources to smaller models/datasets. Full Installation is the complete setup with full functionality for local or cloud environments and supports models/datasets of any size.",
+"source_evidence": [
+{"file": "walkthroughft.rst", "lines": [4, 8]}
+]
+},
+{
+"question_id": 19,
+"question": "In RFLangChainRagSpec, how are Create, Read, and Update vector-store modes determined by whether document_loader and pre-existing index or collection identifiers are provided?",
+"reference_answer": "Create mode is when document_loader is provided and no pre-existing index/collection identifier is given. Read mode is when document_loader is absent and pre-existing index/collection identifiers are provided. Update mode is when both document_loader and pre-existing identifiers are provided.",
+"source_evidence": [
+{"file": "ragspecs.rst", "lines": [63, 65]}
+]
+},
+{
+"question_id": 20,
+"question": "If a team wants the new dashboard capabilities described on this page, how does support differ between RapidFire's MLflow-fork dashboard and TensorBoard/Trackio?",
+"reference_answer": "RapidFire supports MLflow, TensorBoard, and Trackio for logging, but the page states the new dashboard features in that section are currently only available in RapidFire's MLflow-fork dashboard, not yet in TensorBoard/Trackio.",
+"source_evidence": [
+{"file": "dashboard.rst", "lines": [11, 14]},
+{"file": "dashboard.rst", "lines": [30, 31]}
+]
+}
+]
