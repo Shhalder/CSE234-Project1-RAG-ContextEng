@@ -1,0 +1,30 @@
+{% extends "!layout.html" %}
+
+{% block extrahead %}
+{{ super() }}
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QZTK6EFLKD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-QZTK6EFLKD');
+</script>
+<style>
+  /* Match code block font size to paragraph text */
+  .rst-content div.highlight pre {
+    font-size: 0.9em;
+    line-height: 1.5;
+  }
+
+  /* Also target inline code */
+  .rst-content code.literal {
+    font-size: 0.9em;
+  }
+
+  /* Widen the main documentation content area */
+  .wy-nav-content {
+    max-width: min(92vw, 1400px); /* fluid: ~92% of viewport, capped for readability */
+  }
+</style>
+{% endblock %}
