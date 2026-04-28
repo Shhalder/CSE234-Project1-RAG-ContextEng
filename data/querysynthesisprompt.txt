@@ -1,0 +1,44 @@
+Generate 20 synthetic golden-query tuples for a RapidFire AI documentation Q&A assistant.
+
+You must follow a two-stage process and strict diversity constraints.
+
+Stage 1: Generate 20 tuples of (doc_topic, question_type, scenario).
+
+Dimensions:
+
+- doc_topic: choose from the .rst corpus (examples: configs.rst, experiment.rst, ragspecs.rst, promptothers.rst, generators.rst, trainers.rst, onlineagg.rst, icops.rst, dashboard.rst, issues.rst, troubleshooting.rst, plus other relevant .rst files).
+- question_type: factual lookup, conceptual explanation, procedural how-to, comparative.
+- scenario: exact match, synthesis, constrained edge case.
+
+Hard diversity constraints:
+
+- Use at least 15 distinct doc topics across the 20 tuples.
+- No doc topic can appear more than 2 times.
+- Exactly 5 questions per question_type.
+- Use at least 5 tuples for synthesis and at least 5 for constrained edge case.
+- Avoid near-duplicate tuple semantics.
+
+Stage 2: For each tuple, generate one realistic user question.
+
+Question constraints:
+
+- Must be answerable from docs with concrete evidence spans (filename + line ranges).
+- Must be specific, non-trivial, and unambiguous.
+- Must not duplicate or closely paraphrase known validation-set wording.
+- Prefer single-file grounding; at most 4 questions may require cross-file synthesis.
+- If docs do not explicitly state a comparison, do not force a comparative question.
+
+Output JSON only, exactly this schema:
+[
+{
+"id": 1,
+"tuple": {
+"doc_topic": "...",
+"question_type": "...",
+"scenario": "..."
+},
+"question": "..."
+}
+]
+
+Before final output, self-check and enforce all constraints. If any constraint is violated, regenerate until valid.
