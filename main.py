@@ -27,6 +27,10 @@ def load_input_questions(input_path: Path) -> List[Dict[str, Any]]:
     for row in data:
         if not isinstance(row, dict):
             raise ValueError("Each item must be an object.")
+    if "id" in row and "question_id" not in row:
+        row["question_id"] = row["id"]
+        if "id" in row and "question_id" not in row:
+            row["question_id"] = row["id"]
         if "question_id" not in row or "question" not in row:
             raise ValueError("Each item must have question_id and question.")
     return data # return Python list
@@ -41,7 +45,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 
 BATCH_SIZE = 32
-DOCS_DIR = "sourcedocs"
+DOCS_DIR = "data/sourcedocs"
 MODEL_NAME = "api-mistral-small-3.2-2506"
 MAX_COMPLETION_TOKENS = 512
 TOTAL_BUDGET_TOKENS = 2000 # total budget for input prompt
@@ -223,7 +227,9 @@ def extract_sources_from_docs(docs: List) -> List[List[Any]]:
         key = (filename, startline, endline)
         if key not in seen: # ensures each source entry is only added once
             seen.add(key)
-            sources.append([filename, startline, endline])
+            if startline > endline:
+             startline, endline = endline, startline
+        sources.append([filename, startline, endline])
 
     return sources
 
@@ -234,7 +240,7 @@ def generate_answer(client: OpenAI, question: str) -> Dict[str, Any]:
     prepped = preprocess_fn(batch=batch, rag=rag, prompt_manager=None) # retrieve top chunk, serialize into text, return prompt + retrieved chunks
 
     messages = prepped["prompts"][0] # extract prompt
-    retrieved_docs = prepped["retrieved_docs"][0] # extract doc
+    retrieved_docs = prepped["retrieved_docs"][0] # extract doc 
 
     response = client.chat.completions.create( # call LLM
         model=MODEL_NAME,
@@ -244,7 +250,7 @@ def generate_answer(client: OpenAI, question: str) -> Dict[str, Any]:
     answer = response.choices[0].message.content or "" # get answer text
     sources = extract_sources_from_docs(retrieved_docs) # extract evidence metadata
 
-    return {"answer": answer.strip(), "sources": sources} # return final payload
+    return {"answer": answer.strip(), "sources": sources, "retrieved_context": prepped["prompts"][0][1]["content"]} # return final payload
 
 
 def write_output(output_path: Path, rows: List[Dict[str, Any]]) -> None:
@@ -262,11 +268,14 @@ def main() -> None:
     output_path = Path(args.output)
 
     questions = load_input_questions(input_path) # load questions, returns list of {question_id, question}
-    client = make_openai_client() # initialize API client
+    client = make_openai_client()
+    rag.build_pipeline() # initialize API client
 
     rows = [] # initialize empty Python list of outputs {question_id:, answer:, sources: }
 
     for row in questions: # iterate through questions
+        if "id" in row and "question_id" not in row:
+            row["question_id"] = row["id"]
 
         result = generate_answer(client=client, question=row["question"]) # answer and sources saved in result
 
@@ -275,6 +284,7 @@ def main() -> None:
                 "question_id": row["question_id"],
                 "answer": result["answer"],
                 "sources": result["sources"],
+        "retrieved_context": result["retrieved_context"],
             }
         )
 
