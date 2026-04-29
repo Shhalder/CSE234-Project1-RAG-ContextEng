@@ -5,14 +5,17 @@ Scores a student output JSON against a validation set using the released
 3-metric rubric: Correctness (binary Pass/Fail), Faithfulness (binary Pass/Fail),
 and Completeness (0-5).
 
-    # OpenAI:
-    export OPENAI_API_KEY=sk-...
-    python3 run_judge.py --output OUTPUT.json --validation VAL.json
+The official judge for this project is `claude-sonnet-4-6` on the TritonAI
+gateway. The hidden test set will be graded with this model. Run as:
 
-    # TritonAI:
     export OPENAI_API_KEY=<TritonAI key from api-key.txt>
     python3 run_judge.py --output OUTPUT.json --validation VAL.json \\
-        --base-url https://tritonai-api.ucsd.edu/v1 --model <TritonAI chat model>
+        --base-url https://tritonai-api.ucsd.edu/v1 \\
+        --model claude-sonnet-4-6
+
+See https://tritonai-api.ucsd.edu/ui/model_hub_table/ for the TritonAI model
+hub. The CLI uses an OpenAI-compatible client, so any OpenAI-compatible
+endpoint also works as long as --base-url and --model are set correctly.
 
 Output JSON entries must include 'retrieved_context' (the text the generator saw);
 it is used to score Faithfulness. Emits a JSON report to stdout (redirect with
@@ -38,7 +41,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--output", required=True)
     ap.add_argument("--validation", required=True)
-    ap.add_argument("--model", default="gpt-4o-mini")
+    ap.add_argument("--model", default="claude-sonnet-4-6")
     ap.add_argument("--base-url", default=None)
     ap.add_argument("--max-attempts", type=int, default=3)
     args = ap.parse_args()

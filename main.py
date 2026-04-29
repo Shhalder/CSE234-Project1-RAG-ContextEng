@@ -13,6 +13,7 @@ import json
 from typing import Any, Dict, List
 
 from rapidfireai.automl import RFLangChainRagSpec, RFOpenAIAPIModelConfig
+from rapidfireai.components.rerankers import CrossEncoderReranker, HuggingFaceCrossEncoder
 from openai import OpenAI
 import tiktoken
 
@@ -42,7 +43,7 @@ def load_input_questions(input_path: Path) -> List[Dict[str, Any]]:
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain.retrievers.document_compressors import CrossEncoderReranker  
+from sentence_transformers import CrossEncoder  
 from langchain_huggingface import HuggingFaceEmbeddings
 
 BATCH_SIZE = 32
@@ -236,7 +237,10 @@ def extract_sources_from_docs(docs: List) -> List[List[Any]]:
             seen.add(key)
             if startline > endline:
                 startline, endline = endline, startline
-        sources.append([filename, startline, endline])
+        key = (filename, startline, endline)
+        if key not in seen:
+            seen.add(key)
+            sources.append([filename, startline, endline])
 
     return sources
 

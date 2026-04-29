@@ -8,10 +8,13 @@ Your preprocess/postprocess must populate these batch fields:
     ground_truth_spans   list of lists of (file, start, end) tuples per query
     reference_answer     list of str per query
 
-Configure the judge via env vars before experiment.run_evals():
-    os.environ["OPENAI_API_KEY"]  = "..."
-    os.environ["JUDGE_MODEL"]     = "gpt-4o-mini"  # or a TritonAI chat model
-    os.environ["JUDGE_BASE_URL"]  = ""             # empty for OpenAI
+The official judge for this project is `claude-sonnet-4-6` on the TritonAI
+gateway. Configure via env vars before experiment.run_evals():
+    os.environ["OPENAI_API_KEY"] = "<TritonAI key from api-key.txt>"
+    os.environ["JUDGE_BASE_URL"] = "https://tritonai-api.ucsd.edu/v1"
+    os.environ["JUDGE_MODEL"]    = "claude-sonnet-4-6"
+
+See https://tritonai-api.ucsd.edu/ui/model_hub_table/ for available models.
 """
 
 import os
@@ -33,15 +36,15 @@ def sample_compute_metrics_fn(batch: Dict[str, listtype]) -> Dict[str, Dict[str,
 
     metrics: Dict[str, Dict[str, Any]] = {
         "Total":           {"value": total},
-        "F1@5":            {"value": mean_f1},
-        "Precision@5":     {"value": mean_p},
-        "Recall@5":        {"value": mean_r},
+        "F1_at_5":         {"value": mean_f1},
+        "Precision_at_5":  {"value": mean_p},
+        "Recall_at_5":     {"value": mean_r},
         "Retrieval Score": {"value": (mean_f1 + mean_p + mean_r) / 3},
     }
 
     # Generation (LLM judge) -- only when the generator produced answers
     if "generated_text" in batch:
-        model = os.environ.get("JUDGE_MODEL", "gpt-4o-mini")
+        model = os.environ.get("JUDGE_MODEL", "claude-sonnet-4-6")
         base_url = os.environ.get("JUDGE_BASE_URL") or None
         corr, faith, comp, failures = [], [], [], 0
 
@@ -59,12 +62,15 @@ def sample_compute_metrics_fn(batch: Dict[str, listtype]) -> Dict[str, Dict[str,
         mean_c, mean_fa, mean_cp = mean(corr), mean(faith), mean(comp)
         # Partial Generation Score: mean of 3 normalized released metrics.
         # Leaderboard Generation Score includes 2 hidden binary metrics (not computed here).
+        # Metric names use only alphanumerics, underscores, and spaces so they
+        # are accepted by MLflow's metric-name validation (parentheses and `@`
+        # cause MLflow to silently drop the metric).
         metrics.update({
-            "Correctness (pass rate)":        {"value": mean_c},
-            "Faithfulness (pass rate)":       {"value": mean_fa},
-            "Completeness (normalized)":      {"value": mean_cp},
-            "Generation Score (3 released)":  {"value": (mean_c + mean_fa + mean_cp) / 3},
-            "Judge Failures":                 {"value": failures},
+            "Correctness_pass_rate":         {"value": mean_c},
+            "Faithfulness_pass_rate":        {"value": mean_fa},
+            "Completeness_normalized":       {"value": mean_cp},
+            "Generation_Score_3_released":   {"value": (mean_c + mean_fa + mean_cp) / 3},
+            "Judge Failures":                {"value": failures},
         })
 
     return metrics
@@ -79,18 +85,18 @@ def sample_accumulate_metrics_fn(aggregated: Dict[str, listtype]) -> Dict[str, D
     # If no queries were processed (e.g., all batches failed), return zeros
     # rather than dividing by zero.
     if total == 0:
-        for metric in ["F1@5", "Precision@5", "Recall@5", "Retrieval Score",
-                       "Correctness (pass rate)", "Faithfulness (pass rate)",
-                       "Completeness (normalized)", "Generation Score (3 released)"]:
+        for metric in ["F1_at_5", "Precision_at_5", "Recall_at_5", "Retrieval Score",
+                       "Correctness_pass_rate", "Faithfulness_pass_rate",
+                       "Completeness_normalized", "Generation_Score_3_released"]:
             if metric in aggregated:
                 out[metric] = {"value": 0.0, "is_algebraic": True, "value_range": (0, 1)}
         if "Judge Failures" in aggregated:
             out["Judge Failures"] = {"value": sum(m["value"] for m in aggregated["Judge Failures"])}
         return out
 
-    for metric in ["F1@5", "Precision@5", "Recall@5", "Retrieval Score",
-                   "Correctness (pass rate)", "Faithfulness (pass rate)",
-                   "Completeness (normalized)", "Generation Score (3 released)"]:
+    for metric in ["F1_at_5", "Precision_at_5", "Recall_at_5", "Retrieval Score",
+                   "Correctness_pass_rate", "Faithfulness_pass_rate",
+                   "Completeness_normalized", "Generation_Score_3_released"]:
         if metric in aggregated:
             out[metric] = {
                 "value": sum(m["value"] * n for m, n in zip(aggregated[metric], ns)) / total,

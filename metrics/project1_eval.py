@@ -21,8 +21,9 @@ Span = Tuple[str, int, int]
 # Scoring semantics:
 #   - A retrieved span is a "hit" if it shares a filename with some ground-truth
 #     span AND their inclusive line intervals overlap.
-#   - Precision@k uses a fixed denominator of k (standard IR convention);
-#     missing slots (when fewer than k spans are retrieved) count as non-hits.
+#   - Precision@k denominator is min(k, number_retrieved). A system that
+#     retrieves fewer than k spans is not penalized for unused slots; this
+#     rewards concise retrieval and matches sklearn / ranx / BEIR conventions.
 #   - Precision counts each retrieved span independently: multiple retrieved
 #     spans overlapping the same ground-truth span each count as hits.
 #   - Recall counts each ground-truth span independently: a gt span is recalled
@@ -40,9 +41,10 @@ def _count_hits(xs: List[Span], ys: List[Span]) -> int:
 
 
 def precision_at_k(retrieved: List[Span], gt: List[Span], k: int = 5) -> float:
-    """Standard fixed-denominator Precision@k. If fewer than k spans are
-    retrieved, missing slots are counted as non-hits."""
-    return _count_hits(retrieved[:k], gt) / k if k > 0 else 0.0
+    """Precision@k with denominator = min(k, len(retrieved)). A system that
+    retrieves fewer than k spans is not penalized for unused slots."""
+    top = retrieved[:k]
+    return _count_hits(top, gt) / len(top) if top else 0.0
 
 
 def recall_at_k(retrieved: List[Span], gt: List[Span], k: int = 5) -> float:
@@ -102,7 +104,7 @@ def call_judge(
     reference_answer: str,
     retrieved_context: str,
     system_answer: str,
-    model: str = "gpt-4o-mini",
+    model: str = "claude-sonnet-4-6",
     base_url: str | None = None,
     api_key: str | None = None,
     max_attempts: int = 3,
@@ -137,9 +139,17 @@ def call_judge(
                 model=model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.0,
-                max_tokens=600,
             )
-            text = resp.choices[0].message.content.strip()
+            text = resp.choices[0].message.content
+            # Some OpenAI-compatible providers return None content if the
+            # response was cut off; treat as a failure to retry with a clear
+            # error rather than crashing on .strip().
+            if text is None:
+                raise ValueError(
+                    f"Judge response is None (finish_reason="
+                    f"{resp.choices[0].finish_reason!r})"
+                )
+            text = text.strip()
             text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text, flags=re.MULTILINE).strip()
             parsed = json.loads(text)
 
