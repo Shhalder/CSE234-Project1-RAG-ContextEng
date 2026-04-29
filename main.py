@@ -1,6 +1,6 @@
 import argparse
 import os
-from pathlib import Pathr
+from pathlib import Path
 from langchain_community.cross_encoders import HuggingFaceCrossEncoder
 
 # Triton API key
@@ -28,8 +28,6 @@ def load_input_questions(input_path: Path) -> List[Dict[str, Any]]:
     for row in data:
         if not isinstance(row, dict):
             raise ValueError("Each item must be an object.")
-    if "id" in row and "question_id" not in row:
-        row["question_id"] = row["id"]
         if "id" in row and "question_id" not in row:
             row["question_id"] = row["id"]
         if "question_id" not in row or "question" not in row:
@@ -43,7 +41,7 @@ def load_input_questions(input_path: Path) -> List[Dict[str, Any]]:
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.document_compressors import CrossEncoderReranker
+from langchain.retrievers.document_compressors import CrossEncoderReranker
 from langchain_huggingface import HuggingFaceEmbeddings
 
 BATCH_SIZE = 32
@@ -106,16 +104,16 @@ rag = RFLangChainRagSpec( # RAG
         sample_seed=42,
     ),
     text_splitter=RecursiveCharacterTextSplitter.from_tiktoken_encoder( # LangChain splits by large boundaries first then smaller ones
-        encoding_name="gpt2", chunk_size=512, chunk_overlap=32, add_start_index=True, # KNOBS: chunk size, chunk overlap
+        encoding_name="gpt2", chunk_size=256, chunk_overlap=64, add_start_index=True, # KNOBS: chunk size, chunk overlap
     ), # add_start_index=True adds a start_index for each chunk
     embedding_cfg={
         "class": HuggingFaceEmbeddings, # KNOB: embedding method?
-        "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+        "model_name":"BAAI/bge-small-en-v1.5",
         "model_kwargs": {"device": "cpu"},
         "encode_kwargs": {"normalize_embeddings": True, "batch_size": BATCH_SIZE}, # how many chunks are embedded
     },
     vector_store_cfg={"type": "faiss", "batch_size": BATCH_SIZE}, # KNOBS: vector store, how many chunks inserted
-    search_cfg={"type": "similarity", "k": 20}, # KNOBS: search configuration types
+    search_cfg={"type": "mmr", "k": 20}, # KNOBS: search configuration types
     reranker=reranker,
     enable_gpu_search=False,
     document_template=custom_template,
@@ -123,10 +121,11 @@ rag = RFLangChainRagSpec( # RAG
 
 # instruction prompt
 INSTRUCTIONS = """
-You are a technical documentation assistant.
-Answer the user's question using only the provided context chunks.
-
+You are a technical documentation assistant for Rapidfire AI.
+Answer ONLY using the provided text.  Be specific and include exact values, 
+parameter names, and commands when available.
 Rules:
+- Quote exact values from docs when answering factual questions
 - If the context is insufficient, say you do not know based on the provided context.
 - Keep the answer concise and factual.
 - Do not invent APIs, arguments, or behaviors not supported by context.
@@ -236,7 +235,7 @@ def extract_sources_from_docs(docs: List) -> List[List[Any]]:
         if key not in seen: # ensures each source entry is only added once
             seen.add(key)
             if startline > endline:
-             startline, endline = endline, startline
+                startline, endline = endline, startline
         sources.append([filename, startline, endline])
 
     return sources
