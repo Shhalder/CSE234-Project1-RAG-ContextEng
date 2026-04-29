@@ -41,6 +41,7 @@ from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
+from sentence_transformers import CrossEncoder
 
 BATCH_SIZE = 32
 DOCS_DIR = "data/sourcedocs"
@@ -50,6 +51,9 @@ TOTAL_BUDGET_TOKENS = 2000 # total budget for input prompt
 RESERVED_NON_CONTEXT_TOKENS = 400 # reserved for instruction prompt, user question, and scaffolding
 MAX_CONTEXT_TOKENS = TOTAL_BUDGET_TOKENS - RESERVED_NON_CONTEXT_TOKENS
 TOKENIZER = tiktoken.get_encoding("gpt2")
+RERANK_TOP_N = 5
+RETRIEVAL_K = 20
+cross_encoder = CrossEncoder("cross-encoder/ms-marco-MiniLM-L6-v2")
 
 def custom_template(doc: Document) -> str:
     return f"{doc.metadata.get('source', '')}: {doc.page_content}"
@@ -57,6 +61,15 @@ def custom_template(doc: Document) -> str:
 
 def count_tokens(text: str) -> int:
     return len(TOKENIZER.encode(text))
+
+
+def rerank_docs(query: str, docs: List[Document], top_n: int = RERANK_TOP_N) -> List[Document]:
+    if not docs:
+        return docs
+    pairs = [[query, doc.page_content] for doc in docs]
+    scores = cross_encoder.predict(pairs)
+    scored = sorted(zip(scores, docs), key=lambda x: x[0], reverse=True)
+    return [doc for _, doc in scored[:top_n]]
 
 # ensure retirved context stays within context limit (input: list of retrieved chunks)
 def clip_docs_to_context_budget(docs: List[Document]) -> tuple[str, List[Document]]:
@@ -105,7 +118,7 @@ rag = RFLangChainRagSpec( # RAG
         "encode_kwargs": {"normalize_embeddings": True, "batch_size": BATCH_SIZE}, # how many chunks are embedded
     },
     vector_store_cfg={"type": "faiss", "batch_size": BATCH_SIZE}, # KNOBS: vector store, how many chunks inserted
-    search_cfg={"type": "similarity", "k": 5}, # KNOBS: search configuration types
+    search_cfg={"type": "mmr", "k": RETRIEVAL_K}, # retrieve broader candidates before reranking
     # TODO: reranking
     enable_gpu_search=False,
     document_template=custom_template,
@@ -129,6 +142,9 @@ def preprocess_fn(
 ) -> Dict[str, List]:
     # retrieve top relevant .rst chunks so we can keep source metadata for output sources
     all_context_docs = rag.get_context(batch_queries=batch["question"], serialize=False)
+    all_context_docs = [
+        rerank_docs(question, docs) for question, docs in zip(batch["question"], all_context_docs)
+    ]
 
     # convert retrieved docs to context strings with explicit per-query token budget clipping
     serialized_context = []
