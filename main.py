@@ -13,7 +13,6 @@ import json
 from typing import Any, Dict, List
 
 from rapidfireai.automl import RFLangChainRagSpec, RFOpenAIAPIModelConfig
-from rapidfireai.components.rerankers import CrossEncoderReranker, HuggingFaceCrossEncoder
 from openai import OpenAI
 import tiktoken
 
@@ -55,6 +54,17 @@ RESERVED_NON_CONTEXT_TOKENS = 400 # reserved for instruction prompt, user questi
 MAX_CONTEXT_TOKENS = TOTAL_BUDGET_TOKENS - RESERVED_NON_CONTEXT_TOKENS
 TOKENIZER = tiktoken.get_encoding("gpt2")
 
+# cross encoder reranker
+cross_encoder = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+
+def rerank_docs(query, docs, top_n=5):
+    if not docs:
+        return docs
+    pairs = [[query, doc.page_content] for doc in docs]
+    scores = cross_encoder.predict(pairs)
+    scored = sorted(zip(scores, docs), key=lambda x: x[0], reverse=True)
+    return [doc for _, doc in scored[:top_n]]
+
 def custom_template(doc: Document) -> str:
     return f"{doc.metadata.get('source', '')}: {doc.page_content}"
 
@@ -62,7 +72,7 @@ def custom_template(doc: Document) -> str:
 def count_tokens(text: str) -> int:
     return len(TOKENIZER.encode(text))
 
-# ensure retirved context stays within context limit (input: list of retrieved chunks)
+# ensure retrieved context stays within context limit (input: list of retrieved chunks)
 def clip_docs_to_context_budget(docs: List[Document]) -> tuple[str, List[Document]]:
     selected_docs: List[Document] = []
     context_parts: List[str] = []
@@ -91,12 +101,6 @@ def clip_docs_to_context_budget(docs: List[Document]) -> tuple[str, List[Documen
 
     return "\n\n".join(context_parts), selected_docs # return prompt-ready string of kep chunks, subset of chunks that fit budget
 
-reranker = CrossEncoderReranker(
-    model=HuggingFaceCrossEncoder(
-        model_name="cross-encoder/ms-marco-MiniLM-L-6-v2"
-    ),
-    top_n=5
-)
 rag = RFLangChainRagSpec( # RAG
     document_loader=DirectoryLoader( # load document
         path=DOCS_DIR,
@@ -116,7 +120,6 @@ rag = RFLangChainRagSpec( # RAG
     },
     vector_store_cfg={"type": "faiss", "batch_size": BATCH_SIZE}, # KNOBS: vector store, how many chunks inserted
     search_cfg={"type": "mmr", "k": 20}, # KNOBS: search configuration types
-    reranker=reranker,
     enable_gpu_search=False,
     document_template=custom_template,
 )
@@ -135,10 +138,11 @@ Rules:
 
 # prepare inputs (takes raw questions and returns structured prompts and chunk objects)
 def preprocess_fn(
-    batch: Dict[str, List[str]], rag: RFLangChainRagSpec, prompt_manager=None
-) -> Dict[str, List]:
+    batch: Dict[str, List[str]], rag: RFLangChainRagSpec, prompt_manager=None) -> Dict[str, List]:
     # retrieve top relevant .rst chunks so we can keep source metadata for output sources
     all_context_docs = rag.get_context(batch_queries=batch["question"], serialize=False)
+    all_context_docs = [rerank_docs(q, docs) for q, docs in zip(batch["question"], all_context_docs)]
+
 
     # convert retrieved docs to context strings with explicit per-query token budget clipping
     serialized_context = []
@@ -166,27 +170,22 @@ def preprocess_fn(
 
 
 
-# attach RAG to LLM
-openai_config = RFOpenAIAPIModelConfig(
-    client_config={
-        "api_key": TRITON_API_KEY,
-        "base_url": "https://tritonai-api.ucsd.edu",
-        "max_retries": 2,
-    },
-    model_config={
-        "model": MODEL_NAME,
-        "max_completion_tokens": MAX_COMPLETION_TOKENS, # cap on how many tokens the model can generate for output
-    },
-    rpm_limit=120,
-    tpm_limit=1_000_000,
-    rag=rag,
-    prompt_manager=None,
-)
-
-
-
-
-
+# # attach RAG to LLM
+# openai_config = RFOpenAIAPIModelConfig(
+#     client_config={
+#         "api_key": TRITON_API_KEY,
+#         "base_url": "https://tritonai-api.ucsd.edu",
+#         "max_retries": 2,
+#     },
+#     model_config={
+#         "model": MODEL_NAME,
+#         "max_completion_tokens": MAX_COMPLETION_TOKENS, # cap on how many tokens the model can generate for output
+#     },
+#     rpm_limit=120,
+#     tpm_limit=1_000_000,
+#     rag=rag,
+#     prompt_manager=None,
+# )
 
 
 # input/output
@@ -222,22 +221,22 @@ def extract_sources_from_docs(docs: List) -> List[List[Any]]:
             continue
 
         text = _get_text(source_path)
-
         # start/end line calculation
         start_char = int(doc.metadata.get("start_index", 0)) # set starting character to start_index
         end_char = min(start_char + len(doc.page_content), len(text)) # startig character plus length of chunk
         startline = text.count("\n", 0, start_char) + 1 # counts newlines before starting character
         endline = text.count("\n", 0, end_char) + 1 # counts newlines until ending character
-
+        if startline > endline:
+            startline, endline = endline, startline
 
         filename = Path(source_path).name
 
         key = (filename, startline, endline)
-        if key not in seen: # ensures each source entry is only added once
-            seen.add(key)
-            if startline > endline:
-                startline, endline = endline, startline
-        key = (filename, startline, endline)
+        # if key not in seen: # ensures each source entry is only added once
+        #     seen.add(key)
+        #     if startline > endline:
+        #         startline, endline = endline, startline
+        # key = (filename, startline, endline)
         if key not in seen:
             seen.add(key)
             sources.append([filename, startline, endline])
