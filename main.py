@@ -1,6 +1,7 @@
 import argparse
 import os
-from pathlib import Path
+from pathlib import Pathr
+from langchain_community.cross_encoders import HuggingFaceCrossEncoder
 
 # Triton API key
 TRITON_API_KEY = os.getenv("TRITON_API_KEY")
@@ -42,6 +43,7 @@ def load_input_questions(input_path: Path) -> List[Dict[str, Any]]:
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.document_compressors import CrossEncoderReranker
 from langchain_huggingface import HuggingFaceEmbeddings
 
 BATCH_SIZE = 32
@@ -89,6 +91,12 @@ def clip_docs_to_context_budget(docs: List[Document]) -> tuple[str, List[Documen
 
     return "\n\n".join(context_parts), selected_docs # return prompt-ready string of kep chunks, subset of chunks that fit budget
 
+reranker = CrossEncoderReranker(
+    model=HuggingFaceCrossEncoder(
+        model_name="cross-encoder/ms-marco-MiniLM-L-6-v2"
+    ),
+    top_n=5
+)
 rag = RFLangChainRagSpec( # RAG
     document_loader=DirectoryLoader( # load document
         path=DOCS_DIR,
@@ -107,8 +115,8 @@ rag = RFLangChainRagSpec( # RAG
         "encode_kwargs": {"normalize_embeddings": True, "batch_size": BATCH_SIZE}, # how many chunks are embedded
     },
     vector_store_cfg={"type": "faiss", "batch_size": BATCH_SIZE}, # KNOBS: vector store, how many chunks inserted
-    search_cfg={"type": "similarity", "k": 5}, # KNOBS: search configuration types
-    # TODO: reranking
+    search_cfg={"type": "similarity", "k": 20}, # KNOBS: search configuration types
+    reranker=reranker,
     enable_gpu_search=False,
     document_template=custom_template,
 )
