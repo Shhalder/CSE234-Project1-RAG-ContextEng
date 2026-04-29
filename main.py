@@ -27,8 +27,6 @@ def load_input_questions(input_path: Path) -> List[Dict[str, Any]]:
     for row in data:
         if not isinstance(row, dict):
             raise ValueError("Each item must be an object.")
-    if "id" in row and "question_id" not in row:
-        row["question_id"] = row["id"]
         if "id" in row and "question_id" not in row:
             row["question_id"] = row["id"]
         if "question_id" not in row or "question" not in row:
@@ -204,7 +202,7 @@ def _get_text(path: str) -> str:
     return _file_cache[path]
 
 # extract evidence metadata for output (file name, start line, end line)
-def extract_sources_from_docs(docs: List) -> List[List[Any]]:
+def extract_sources_from_docs(docs: List) -> List[Dict[str, Any]]:
     seen = set()
     sources = []
 
@@ -228,8 +226,8 @@ def extract_sources_from_docs(docs: List) -> List[List[Any]]:
         if key not in seen: # ensures each source entry is only added once
             seen.add(key)
             if startline > endline:
-             startline, endline = endline, startline
-        sources.append([filename, startline, endline])
+                startline, endline = endline, startline
+            sources.append({"file": filename, "lines": [startline, endline]})
 
     return sources
 
