@@ -1,46 +1,132 @@
+import json
 import os
 from pathlib import Path
-from rapidfireai.automl import RFGridSearch, RFLangChainRagSpec, RFOpenAIAPIModelConfig
-from rapidfireai.experiment import Experiment
-from langchain_community.document_loaders import DirectoryLoader, TextLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
+from typing import Any, Dict, List
 
-# API key
+from datasets import Dataset
+from langchain_community.document_loaders import DirectoryLoader, TextLoader
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from rapidfireai import Experiment
+from rapidfireai.automl import RFOpenAIAPIModelConfig, RFLangChainRagSpec
+
+from metrics.project1_eval import to_spans
+from metrics.rapidfire_integration_example import (
+    sample_accumulate_metrics_fn,
+    sample_compute_metrics_fn,
+)
+
+# Triton API key
 TRITON_API_KEY = os.getenv("TRITON_API_KEY")
 if not TRITON_API_KEY:
-    TRITON_API_KEY = Path("~/api-key.txt").expanduser().read_text(encoding="utf-8").splitlines()[0].strip()
+    TRITON_API_KEY = (
+        Path("~/api-key.txt")
+        .expanduser()
+        .read_text(encoding="utf-8")
+        .splitlines()[0]
+        .strip()
+    )
+
+# Keep judge key in sync by default unless user explicitly set OPENAI_API_KEY.
+if not os.getenv("OPENAI_API_KEY"):
+    os.environ["OPENAI_API_KEY"] = TRITON_API_KEY
 
 DOCS_DIR = "data/sourcedocs"
 MODEL_NAME = "api-mistral-small-3.2-2506"
+JUDGE_MODEL = os.getenv("JUDGE_MODEL", MODEL_NAME)
+JUDGE_BASE_URL = os.getenv("JUDGE_BASE_URL", "https://tritonai-api.ucsd.edu/v1")
 
-# 8 configs varying chunk_size, chunk_overlap, k, embedding model
-configs = [
-    {"chunk_size": 256,  "chunk_overlap": 32, "k": 5,  "model": "sentence-transformers/all-MiniLM-L6-v2"},
-    {"chunk_size": 512,  "chunk_overlap": 32, "k": 5,  "model": "sentence-transformers/all-MiniLM-L6-v2"},
-    {"chunk_size": 1024, "chunk_overlap": 32, "k": 5,  "model": "sentence-transformers/all-MiniLM-L6-v2"},
-    {"chunk_size": 512,  "chunk_overlap": 64, "k": 5,  "model": "sentence-transformers/all-MiniLM-L6-v2"},
-    {"chunk_size": 512,  "chunk_overlap": 32, "k": 3,  "model": "sentence-transformers/all-MiniLM-L6-v2"},
-    {"chunk_size": 512,  "chunk_overlap": 32, "k": 10, "model": "sentence-transformers/all-MiniLM-L6-v2"},
-    {"chunk_size": 512,  "chunk_overlap": 32, "k": 5,  "model": "BAAI/bge-small-en-v1.5"},
-    {"chunk_size": 256,  "chunk_overlap": 64, "k": 10, "model": "BAAI/bge-small-en-v1.5"},
+os.environ["JUDGE_MODEL"] = JUDGE_MODEL
+os.environ["JUDGE_BASE_URL"] = JUDGE_BASE_URL
+
+# 8 configs: vary chunking, top-k, and embedding model.
+CONFIGS: List[Dict[str, Any]] = [
+    {"chunk_size": 256, "chunk_overlap": 32, "k": 5, "embed_model": "sentence-transformers/all-MiniLM-L6-v2"},
+    {"chunk_size": 512, "chunk_overlap": 32, "k": 5, "embed_model": "sentence-transformers/all-MiniLM-L6-v2"},
+    {"chunk_size": 1024, "chunk_overlap": 32, "k": 5, "embed_model": "sentence-transformers/all-MiniLM-L6-v2"},
+    {"chunk_size": 512, "chunk_overlap": 64, "k": 5, "embed_model": "sentence-transformers/all-MiniLM-L6-v2"},
+    {"chunk_size": 512, "chunk_overlap": 32, "k": 3, "embed_model": "sentence-transformers/all-MiniLM-L6-v2"},
+    {"chunk_size": 512, "chunk_overlap": 32, "k": 10, "embed_model": "sentence-transformers/all-MiniLM-L6-v2"},
+    {"chunk_size": 512, "chunk_overlap": 32, "k": 5, "embed_model": "BAAI/bge-small-en-v1.5"},
+    {"chunk_size": 256, "chunk_overlap": 64, "k": 10, "embed_model": "BAAI/bge-small-en-v1.5"},
 ]
 
-# load eval questions
-import json
-eval_data = json.loads(Path("data/evaluation-set-queries.json").read_text())
-# normalize id
-for row in eval_data:
-    if "id" in row and "question_id" not in row:
-        row["question_id"] = row["id"]
-questions = [row["question"] for row in eval_data]
+_FILE_CACHE: dict[str, str] = {}
 
-# run each config
-for i, cfg in enumerate(configs):
-    print(f"\n{'='*50}")
-    print(f"Config {i+1}/8: {cfg}")
-    print('='*50)
 
+def _get_text(path: str) -> str:
+    if path not in _FILE_CACHE:
+        _FILE_CACHE[path] = Path(path).read_text(encoding="utf-8")
+    return _FILE_CACHE[path]
+
+
+def docs_to_spans(docs: List[Any]) -> List[tuple[str, int, int]]:
+    spans: List[tuple[str, int, int]] = []
+    seen = set()
+    for doc in docs:
+        source_path = doc.metadata.get("source", "")
+        if not source_path:
+            continue
+        text = _get_text(source_path)
+        start_char = int(doc.metadata.get("start_index", 0))
+        end_char = min(start_char + len(doc.page_content), len(text))
+        startline = text.count("\n", 0, start_char) + 1
+        endline = text.count("\n", 0, end_char) + 1
+        if startline > endline:
+            startline, endline = endline, startline
+        key = (Path(source_path).name, startline, endline)
+        if key not in seen:
+            seen.add(key)
+            spans.append(key)
+    return spans
+
+
+def preprocess_fn(batch: Dict[str, list], rag: RFLangChainRagSpec, prompt_manager=None) -> Dict[str, list]:
+    all_docs = rag.get_context(batch_queries=batch["query"], serialize=False)
+    serialized_context = rag.serialize_documents(all_docs)
+    retrieved_spans = [docs_to_spans(docs) for docs in all_docs]
+
+    prompts = [
+        [
+            {"role": "system", "content": "Answer the question using only the provided context."},
+            {"role": "user", "content": f"Question:\n{q}\n\nContext:\n{ctx}\n\nAnswer:"},
+        ]
+        for q, ctx in zip(batch["query"], serialized_context)
+    ]
+
+    return {
+        "prompts": prompts,
+        "serialized_context": serialized_context,
+        "retrieved_spans": retrieved_spans,
+        **batch,
+    }
+
+
+def load_eval_dataset(
+    query_path: str = "data/evaluation-set-queries.json",
+    validation_path: str = "validation-set-golden-qa-pairs.json",
+) -> Dataset:
+    queries = json.loads(Path(query_path).read_text(encoding="utf-8"))
+    val = {int(x["question_id"]): x for x in json.loads(Path(validation_path).read_text(encoding="utf-8"))}
+
+    rows = []
+    for q in queries:
+        qid = int(q.get("question_id", q.get("id")))
+        if qid not in val:
+            continue
+        rows.append(
+            {
+                "question_id": qid,
+                "query": q["question"],
+                "reference_answer": val[qid]["reference_answer"],
+                "ground_truth_spans": to_spans(val[qid]["source_evidence"]),
+            }
+        )
+
+    return Dataset.from_list(rows)
+
+
+def make_eval_config(cfg: Dict[str, Any]) -> Dict[str, Any]:
     rag = RFLangChainRagSpec(
         document_loader=DirectoryLoader(
             path=DOCS_DIR,
@@ -57,7 +143,7 @@ for i, cfg in enumerate(configs):
         ),
         embedding_cfg={
             "class": HuggingFaceEmbeddings,
-            "model_name": cfg["model"],
+            "model_name": cfg["embed_model"],
             "model_kwargs": {"device": "cpu"},
             "encode_kwargs": {"normalize_embeddings": True},
         },
@@ -66,23 +152,63 @@ for i, cfg in enumerate(configs):
         enable_gpu_search=False,
     )
 
-    rag.build_pipeline()
+    openai_config = RFOpenAIAPIModelConfig(
+        client_config={
+            "api_key": TRITON_API_KEY,
+            "base_url": "https://tritonai-api.ucsd.edu",
+            "max_retries": 2,
+        },
+        model_config={
+            "model": MODEL_NAME,
+            "max_completion_tokens": 512,
+        },
+        rpm_limit=120,
+        tpm_limit=1_000_000,
+        rag=rag,
+        prompt_manager=None,
+    )
 
-    # retrieve chunks for all questions
-    results = rag.get_context(batch_queries=questions, serialize=True)
+    return {
+        "openai_config": openai_config,
+        "batch_size": 8,
+        "preprocess_fn": preprocess_fn,
+        "compute_metrics_fn": sample_compute_metrics_fn,
+        "accumulate_metrics_fn": sample_accumulate_metrics_fn,
+        "online_strategy_kwargs": {
+            "strategy_name": "normal",
+            "confidence_level": 0.95,
+            "use_fpc": True,
+        },
+    }
 
-    # save results
-    output = []
-    for row, context in zip(eval_data, results):
-        output.append({
-            "question_id": row["question_id"],
-            "question": row["question"],
-            "context": context,
-        })
 
-    out_path = Path(f"logs/config_{i+1}_results.json")
-    out_path.parent.mkdir(exist_ok=True)
-    out_path.write_text(json.dumps(output, indent=2))
-    print(f"Saved to {out_path}")
+def main() -> None:
+    dataset = load_eval_dataset()
+    config_group = [make_eval_config(cfg) for cfg in CONFIGS]
 
-print("\nAll configs done!")
+    experiment = Experiment(
+        experiment_name="p1-rag-evals",
+        mode="eval",
+        experiments_path="./logs/rapidfire_experiments",
+    )
+
+    results = experiment.run_evals(
+        config_group=config_group,
+        dataset=dataset,
+        num_shards=4,
+        num_actors=8,
+        seed=42,
+    )
+
+    Path("logs").mkdir(exist_ok=True)
+    Path("logs/run_evals_results.json").write_text(json.dumps(results, indent=2, default=str), encoding="utf-8")
+    all_results = experiment.get_results()
+    all_results.to_csv("logs/run_evals_table.csv", index=False)
+    experiment.end()
+
+    print("Completed run_evals for 8 configs.")
+    print("Saved logs/run_evals_results.json and logs/run_evals_table.csv")
+
+
+if __name__ == "__main__":
+    main()
