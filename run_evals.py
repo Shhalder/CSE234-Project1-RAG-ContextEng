@@ -183,7 +183,7 @@ def make_eval_config(cfg: Dict[str, Any]) -> Dict[str, Any]:
     )
 
     return {
-        "openai_config": openai_config,
+        "pipeline": openai_config,
         "batch_size": 8,
         "preprocess_fn": preprocess_fn,
         "compute_metrics_fn": sample_compute_metrics_fn,
@@ -202,8 +202,8 @@ def main() -> None:
 
     experiment = Experiment(
         experiment_name="p1-rag-evals",
-        mode="eval",
-        experiments_path="./logs/rapidfire_experiments",
+        mode="evals",
+        # experiments_path="./logs/rapidfire_experiments",
     )
 
     results = experiment.run_evals(
@@ -219,9 +219,6 @@ def main() -> None:
         json.dumps(results, indent=2, default=str),
         encoding="utf-8",
     )
-
-    all_results = experiment.get_results()
-    all_results.to_csv("logs/run_evals_table.csv", index=False)
 
     experiment.end()
 
