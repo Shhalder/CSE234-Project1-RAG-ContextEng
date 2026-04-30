@@ -1,10 +1,11 @@
 import os
+import json
 from pathlib import Path
-from rapidfireai.automl import RFGridSearch, RFLangChainRagSpec, RFOpenAIAPIModelConfig
-from rapidfireai.experiment import Experiment
+from rapidfireai.automl import RFLangChainRagSpec
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
+from sentence_transformers import CrossEncoder
 
 # API key
 TRITON_API_KEY = os.getenv("TRITON_API_KEY")
@@ -12,7 +13,6 @@ if not TRITON_API_KEY:
     TRITON_API_KEY = Path("~/api-key.txt").expanduser().read_text(encoding="utf-8").splitlines()[0].strip()
 
 DOCS_DIR = "data/sourcedocs"
-MODEL_NAME = "api-mistral-small-3.2-2506"
 
 # 8 configs varying chunk_size, chunk_overlap, k, embedding model
 configs = [
@@ -26,10 +26,22 @@ configs = [
     {"chunk_size": 256,  "chunk_overlap": 64, "k": 10, "model": "BAAI/bge-small-en-v1.5"},
 ]
 
+print("Loading CrossEncoder Reranker...")
+cross_encoder = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+
+def rerank_docs(query, docs, top_n=5):
+    if not docs:
+        return docs
+    pairs = [[query, doc.page_content] for doc in docs]
+    scores = cross_encoder.predict(pairs)
+    scored = sorted(zip(scores, docs), key=lambda x: x[0], reverse=True)
+    return [doc for _, doc in scored[:top_n]]
+
+def custom_template(doc) -> str:
+    return f"{doc.metadata.get('source', '')}: {doc.page_content}"
+
 # load eval questions
-import json
 eval_data = json.loads(Path("data/evaluation-set-queries.json").read_text())
-# normalize id
 for row in eval_data:
     if "id" in row and "question_id" not in row:
         row["question_id"] = row["id"]
@@ -62,22 +74,27 @@ for i, cfg in enumerate(configs):
             "encode_kwargs": {"normalize_embeddings": True},
         },
         vector_store_cfg={"type": "faiss"},
-        search_cfg={"type": "similarity", "k": cfg["k"]},
+        # Fetch 20 chunks initially so the reranker has options
+        search_cfg={"type": "similarity", "k": 20},
         enable_gpu_search=False,
+        document_template=custom_template,
     )
 
     rag.build_pipeline()
 
-    # retrieve chunks for all questions
-    results = rag.get_context(batch_queries=questions, serialize=True)
+    # Get raw chunks
+    raw_docs_list = rag.get_context(batch_queries=questions, serialize=False)
 
-    # save results
+    # Rerank and save results
     output = []
-    for row, context in zip(eval_data, results):
+    for row, query, docs in zip(eval_data, questions, raw_docs_list):
+        reranked_docs = rerank_docs(query, docs, top_n=cfg["k"])
+        context_str = "\n\n".join([custom_template(d) for d in reranked_docs])
+        
         output.append({
             "question_id": row["question_id"],
-            "question": row["question"],
-            "context": context,
+            "question": query,
+            "context": context_str,
         })
 
     out_path = Path(f"logs/config_{i+1}_results.json")
