@@ -1,7 +1,14 @@
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Any, Dict, List
+
+# Make metrics modules importable without requiring PYTHONPATH export.
+ROOT_DIR = Path(__file__).resolve().parent
+METRICS_DIR = ROOT_DIR / "metrics"
+if str(METRICS_DIR) not in sys.path:
+    sys.path.insert(0, str(METRICS_DIR))
 
 from datasets import Dataset
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
@@ -10,8 +17,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from rapidfireai import Experiment
 from rapidfireai.automl import RFOpenAIAPIModelConfig, RFLangChainRagSpec
 
-from metrics.project1_eval import to_spans
-from metrics.rapidfire_integration_example import (
+from project1_eval import to_spans
+from rapidfire_integration_example import (
     sample_accumulate_metrics_fn,
     sample_compute_metrics_fn,
 )
@@ -86,6 +93,12 @@ def preprocess_fn(batch: Dict[str, list], rag: RFLangChainRagSpec, prompt_manage
     serialized_context = rag.serialize_documents(all_docs)
     retrieved_spans = [docs_to_spans(docs) for docs in all_docs]
 
+    # Convert JSON-safe spans back to tuple spans for metric functions.
+    ground_truth_spans = [
+        [tuple(span) for span in json.loads(s)]
+        for s in batch["ground_truth_spans_json"]
+    ]
+
     prompts = [
         [
             {"role": "system", "content": "Answer the question using only the provided context."},
@@ -98,13 +111,14 @@ def preprocess_fn(batch: Dict[str, list], rag: RFLangChainRagSpec, prompt_manage
         "prompts": prompts,
         "serialized_context": serialized_context,
         "retrieved_spans": retrieved_spans,
+        "ground_truth_spans": ground_truth_spans,
         **batch,
     }
 
 
 def load_eval_dataset(
     query_path: str = "data/evaluation-set-queries.json",
-    validation_path: str = "validation-set-golden-qa-pairs.json",
+    validation_path: str = "data/evaluation-set-golden-qa-pairs.json",
 ) -> Dataset:
     queries = json.loads(Path(query_path).read_text(encoding="utf-8"))
     val = {int(x["question_id"]): x for x in json.loads(Path(validation_path).read_text(encoding="utf-8"))}
@@ -119,7 +133,7 @@ def load_eval_dataset(
                 "question_id": qid,
                 "query": q["question"],
                 "reference_answer": val[qid]["reference_answer"],
-                "ground_truth_spans": to_spans(val[qid]["source_evidence"]),
+                "ground_truth_spans_json": json.dumps(to_spans(val[qid]["source_evidence"])),
             }
         )
 
@@ -201,9 +215,14 @@ def main() -> None:
     )
 
     Path("logs").mkdir(exist_ok=True)
-    Path("logs/run_evals_results.json").write_text(json.dumps(results, indent=2, default=str), encoding="utf-8")
+    Path("logs/run_evals_results.json").write_text(
+        json.dumps(results, indent=2, default=str),
+        encoding="utf-8",
+    )
+
     all_results = experiment.get_results()
     all_results.to_csv("logs/run_evals_table.csv", index=False)
+
     experiment.end()
 
     print("Completed run_evals for 8 configs.")
