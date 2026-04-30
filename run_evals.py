@@ -183,7 +183,7 @@ def make_eval_config(cfg: Dict[str, Any]) -> Dict[str, Any]:
     )
 
     return {
-        "openai_config": openai_config,
+        "pipeline": openai_config,
         "batch_size": 8,
         "preprocess_fn": preprocess_fn,
         "compute_metrics_fn": sample_compute_metrics_fn,
