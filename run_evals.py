@@ -1,7 +1,6 @@
 import json
 import os
 import sys
-import importlib
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -10,8 +9,15 @@ ROOT_DIR = Path(__file__).resolve().parent
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
-# Alias for metrics/rapidfire_integration_example.py which imports `project1_eval`
-sys.modules["project1_eval"] = importlib.import_module("metrics.project1_eval")
+# Ensure `project1_eval` is importable as a top-level module in Ray workers.
+METRICS_DIR = ROOT_DIR / "metrics"
+if str(METRICS_DIR) not in sys.path:
+    sys.path.insert(0, str(METRICS_DIR))
+
+existing_pythonpath = os.environ.get("PYTHONPATH", "")
+pythonpath_parts = [p for p in existing_pythonpath.split(os.pathsep) if p]
+if str(METRICS_DIR) not in pythonpath_parts:
+    os.environ["PYTHONPATH"] = os.pathsep.join([str(METRICS_DIR), *pythonpath_parts])
 
 from datasets import Dataset
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
@@ -259,4 +265,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
