@@ -206,6 +206,13 @@ def make_eval_config(cfg: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def _metric_value(row: Dict[str, Any], key: str) -> Any:
+    value = row.get(key)
+    if isinstance(value, dict):
+        return value.get("value")
+    return value
+
+
 def main() -> None:
     dataset = load_eval_dataset()
     config_group = [make_eval_config(cfg) for cfg in CONFIGS]
@@ -230,25 +237,34 @@ def main() -> None:
     )
 
     # Compact metrics-only summary (easy to read without CSV tooling)
+    if isinstance(results, dict):
+        result_rows = list(results.values())
+    elif isinstance(results, list):
+        result_rows = results
+    else:
+        result_rows = [results]
+
     summary_rows = []
-    for r in results:
+    for r in result_rows:
+        if not isinstance(r, dict):
+            continue
         summary_rows.append(
             {
-                "run_id": r.get("run_id", {}).get("value"),
-                "chunk_size": r.get("chunk_size", {}).get("value"),
-                "chunk_overlap": r.get("chunk_overlap", {}).get("value"),
-                "search_cfg": r.get("search_cfg", {}).get("value"),
+                "run_id": _metric_value(r, "run_id"),
+                "chunk_size": _metric_value(r, "chunk_size"),
+                "chunk_overlap": _metric_value(r, "chunk_overlap"),
+                "search_cfg": _metric_value(r, "search_cfg"),
                 "embedding_model": (
-                    (r.get("embedding_cfg", {}).get("value") or {}).get("model_name")
+                    (_metric_value(r, "embedding_cfg") or {}).get("model_name")
                 ),
-                "F1@5": r.get("F1@5", {}).get("value"),
-                "Precision@5": r.get("Precision@5", {}).get("value"),
-                "Recall@5": r.get("Recall@5", {}).get("value"),
-                "Retrieval Score": r.get("Retrieval Score", {}).get("value"),
-                "Correctness (pass rate)": r.get("Correctness (pass rate)", {}).get("value"),
-                "Faithfulness (pass rate)": r.get("Faithfulness (pass rate)", {}).get("value"),
-                "Completeness (normalized)": r.get("Completeness (normalized)", {}).get("value"),
-                "Generation Score (3 released)": r.get("Generation Score (3 released)", {}).get("value"),
+                "F1@5": _metric_value(r, "F1@5"),
+                "Precision@5": _metric_value(r, "Precision@5"),
+                "Recall@5": _metric_value(r, "Recall@5"),
+                "Retrieval Score": _metric_value(r, "Retrieval Score"),
+                "Correctness (pass rate)": _metric_value(r, "Correctness (pass rate)"),
+                "Faithfulness (pass rate)": _metric_value(r, "Faithfulness (pass rate)"),
+                "Completeness (normalized)": _metric_value(r, "Completeness (normalized)"),
+                "Generation Score (3 released)": _metric_value(r, "Generation Score (3 released)"),
             }
         )
 
