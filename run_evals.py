@@ -183,7 +183,7 @@ def make_eval_config(cfg: Dict[str, Any]) -> Dict[str, Any]:
     )
 
     return {
-        "pipeline": openai_config,
+        "openai_config": openai_config,
         "batch_size": 8,
         "preprocess_fn": preprocess_fn,
         "compute_metrics_fn": sample_compute_metrics_fn,
@@ -203,7 +203,6 @@ def main() -> None:
     experiment = Experiment(
         experiment_name="p1-rag-evals",
         mode="evals",
-        # experiments_path="./logs/rapidfire_experiments",
     )
 
     results = experiment.run_evals(
@@ -220,11 +219,40 @@ def main() -> None:
         encoding="utf-8",
     )
 
+    # Compact metrics-only summary (easy to read without CSV tooling)
+    summary_rows = []
+    for r in results:
+        summary_rows.append(
+            {
+                "run_id": r.get("run_id", {}).get("value"),
+                "chunk_size": r.get("chunk_size", {}).get("value"),
+                "chunk_overlap": r.get("chunk_overlap", {}).get("value"),
+                "search_cfg": r.get("search_cfg", {}).get("value"),
+                "embedding_model": (
+                    (r.get("embedding_cfg", {}).get("value") or {}).get("model_name")
+                ),
+                "F1@5": r.get("F1@5", {}).get("value"),
+                "Precision@5": r.get("Precision@5", {}).get("value"),
+                "Recall@5": r.get("Recall@5", {}).get("value"),
+                "Retrieval Score": r.get("Retrieval Score", {}).get("value"),
+                "Correctness (pass rate)": r.get("Correctness (pass rate)", {}).get("value"),
+                "Faithfulness (pass rate)": r.get("Faithfulness (pass rate)", {}).get("value"),
+                "Completeness (normalized)": r.get("Completeness (normalized)", {}).get("value"),
+                "Generation Score (3 released)": r.get("Generation Score (3 released)", {}).get("value"),
+            }
+        )
+
+    Path("logs/run_evals_summary.json").write_text(
+        json.dumps(summary_rows, indent=2),
+        encoding="utf-8",
+    )
+
     experiment.end()
 
     print("Completed run_evals for 8 configs.")
-    print("Saved logs/run_evals_results.json and logs/run_evals_table.csv")
+    print("Saved logs/run_evals_results.json and logs/run_evals_summary.json")
 
 
 if __name__ == "__main__":
     main()
+
