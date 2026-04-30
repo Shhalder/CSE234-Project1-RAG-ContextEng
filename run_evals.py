@@ -1,8 +1,17 @@
 import json
 import os
 import sys
+import importlib
 from pathlib import Path
 from typing import Any, Dict, List
+
+# Ensure repo root is importable
+ROOT_DIR = Path(__file__).resolve().parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+# Alias for metrics/rapidfire_integration_example.py which imports `project1_eval`
+sys.modules["project1_eval"] = importlib.import_module("metrics.project1_eval")
 
 from datasets import Dataset
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
@@ -16,6 +25,7 @@ from metrics.rapidfire_integration_example import (
     sample_accumulate_metrics_fn,
     sample_compute_metrics_fn,
 )
+
 
 # Triton API key
 TRITON_API_KEY = os.getenv("TRITON_API_KEY")
