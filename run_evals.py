@@ -4,12 +4,6 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List
 
-# Make metrics modules importable without requiring PYTHONPATH export.
-ROOT_DIR = Path(__file__).resolve().parent
-METRICS_DIR = ROOT_DIR / "metrics"
-if str(METRICS_DIR) not in sys.path:
-    sys.path.insert(0, str(METRICS_DIR))
-
 from datasets import Dataset
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -17,8 +11,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from rapidfireai import Experiment
 from rapidfireai.automl import RFOpenAIAPIModelConfig, RFLangChainRagSpec
 
-from project1_eval import to_spans
-from rapidfire_integration_example import (
+from metrics.project1_eval import to_spans
+from metrics.rapidfire_integration_example import (
     sample_accumulate_metrics_fn,
     sample_compute_metrics_fn,
 )
