@@ -213,6 +213,22 @@ def _metric_value(row: Dict[str, Any], key: str) -> Any:
     return value
 
 
+def _extract_run_rows(obj: Any) -> List[Dict[str, Any]]:
+    """Recursively extract eval run records from nested run_evals outputs."""
+    rows: List[Dict[str, Any]] = []
+
+    if isinstance(obj, dict):
+        if "run_id" in obj:
+            rows.append(obj)
+        for v in obj.values():
+            rows.extend(_extract_run_rows(v))
+    elif isinstance(obj, list):
+        for item in obj:
+            rows.extend(_extract_run_rows(item))
+
+    return rows
+
+
 def main() -> None:
     dataset = load_eval_dataset()
     config_group = [make_eval_config(cfg) for cfg in CONFIGS]
@@ -237,17 +253,10 @@ def main() -> None:
     )
 
     # Compact metrics-only summary (easy to read without CSV tooling)
-    if isinstance(results, dict):
-        result_rows = list(results.values())
-    elif isinstance(results, list):
-        result_rows = results
-    else:
-        result_rows = [results]
+    result_rows = _extract_run_rows(results)
 
     summary_rows = []
     for r in result_rows:
-        if not isinstance(r, dict):
-            continue
         summary_rows.append(
             {
                 "run_id": _metric_value(r, "run_id"),
@@ -272,6 +281,11 @@ def main() -> None:
         json.dumps(summary_rows, indent=2),
         encoding="utf-8",
     )
+
+    if not summary_rows:
+        print("Warning: no run rows extracted for summary; check run_evals_results.json structure.")
+    else:
+        print(f"Extracted {len(summary_rows)} run rows for summary.")
 
     experiment.end()
 
