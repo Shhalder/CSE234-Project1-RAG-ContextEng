@@ -216,9 +216,17 @@ def _metric_value(row: Dict[str, Any], key: str) -> Any:
 def _extract_run_rows(obj: Any) -> List[Dict[str, Any]]:
     """Recursively extract eval run records from nested run_evals outputs."""
     rows: List[Dict[str, Any]] = []
+    metric_markers = {
+        "F1@5",
+        "Precision@5",
+        "Recall@5",
+        "Retrieval Score",
+        "Generation Score (3 released)",
+    }
 
     if isinstance(obj, dict):
-        if "run_id" in obj:
+        # Different RapidFire versions may omit run_id in per-run rows.
+        if "run_id" in obj or any(k in obj for k in metric_markers):
             rows.append(obj)
         for v in obj.values():
             rows.extend(_extract_run_rows(v))
@@ -255,11 +263,21 @@ def main() -> None:
     # Compact metrics-only summary (easy to read without CSV tooling)
     result_rows = _extract_run_rows(results)
 
-    summary_rows = []
+    # Deduplicate rows that can be reached via multiple nested paths.
+    deduped_rows: List[Dict[str, Any]] = []
+    seen = set()
     for r in result_rows:
+        key = json.dumps(r, sort_keys=True, default=str)
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped_rows.append(r)
+
+    summary_rows = []
+    for i, r in enumerate(deduped_rows, start=1):
         summary_rows.append(
             {
-                "run_id": _metric_value(r, "run_id"),
+                "run_id": _metric_value(r, "run_id") or i,
                 "chunk_size": _metric_value(r, "chunk_size"),
                 "chunk_overlap": _metric_value(r, "chunk_overlap"),
                 "search_cfg": _metric_value(r, "search_cfg"),
