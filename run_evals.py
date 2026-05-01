@@ -261,37 +261,36 @@ def main() -> None:
     )
 
     # Compact metrics-only summary (easy to read without CSV tooling)
-    result_rows = _extract_run_rows(results)
+    summary_rows: List[Dict[str, Any]] = []
 
-    # Deduplicate rows that can be reached via multiple nested paths.
-    deduped_rows: List[Dict[str, Any]] = []
-    seen = set()
-    for r in result_rows:
-        key = json.dumps(r, sort_keys=True, default=str)
-        if key in seen:
-            continue
-        seen.add(key)
-        deduped_rows.append(r)
+    if isinstance(results, dict):
+        run_items = sorted(
+            results.items(),
+            key=lambda kv: int(kv[0]) if str(kv[0]).isdigit() else str(kv[0]),
+        )
+        metric_rows = []
+        for run_key, run_val in run_items:
+            if isinstance(run_val, list) and len(run_val) >= 2 and isinstance(run_val[1], dict):
+                metric_rows.append((run_key, run_val[1]))
+    else:
+        metric_rows = []
 
-    summary_rows = []
-    for i, r in enumerate(deduped_rows, start=1):
+    for run_key, r in metric_rows:
         summary_rows.append(
             {
-                "run_id": _metric_value(r, "run_id") or i,
-                "chunk_size": _metric_value(r, "chunk_size"),
-                "chunk_overlap": _metric_value(r, "chunk_overlap"),
-                "search_cfg": _metric_value(r, "search_cfg"),
-                "embedding_model": (
-                    (_metric_value(r, "embedding_cfg") or {}).get("model_name")
-                ),
-                "F1@5": _metric_value(r, "F1@5"),
-                "Precision@5": _metric_value(r, "Precision@5"),
-                "Recall@5": _metric_value(r, "Recall@5"),
-                "Retrieval Score": _metric_value(r, "Retrieval Score"),
-                "Correctness (pass rate)": _metric_value(r, "Correctness (pass rate)"),
-                "Faithfulness (pass rate)": _metric_value(r, "Faithfulness (pass rate)"),
-                "Completeness (normalized)": _metric_value(r, "Completeness (normalized)"),
-                "Generation Score (3 released)": _metric_value(r, "Generation Score (3 released)"),
+                "run_id": (r.get("run_id", {}) or {}).get("value", run_key),
+                "chunk_size": (r.get("chunk_size", {}) or {}).get("value"),
+                "chunk_overlap": (r.get("chunk_overlap", {}) or {}).get("value"),
+                "search_cfg": (r.get("search_cfg", {}) or {}).get("value"),
+                "embedding_model": ((r.get("embedding_cfg", {}) or {}).get("value") or {}).get("model_name"),
+                "F1@5": (r.get("F1@5", {}) or {}).get("value"),
+                "Precision@5": (r.get("Precision@5", {}) or {}).get("value"),
+                "Recall@5": (r.get("Recall@5", {}) or {}).get("value"),
+                "Retrieval Score": (r.get("Retrieval Score", {}) or {}).get("value"),
+                "Correctness (pass rate)": (r.get("Correctness (pass rate)", {}) or {}).get("value"),
+                "Faithfulness (pass rate)": (r.get("Faithfulness (pass rate)", {}) or {}).get("value"),
+                "Completeness (normalized)": (r.get("Completeness (normalized)", {}) or {}).get("value"),
+                "Generation Score (3 released)": (r.get("Generation Score (3 released)", {}) or {}).get("value"),
             }
         )
 
