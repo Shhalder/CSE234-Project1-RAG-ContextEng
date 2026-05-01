@@ -83,26 +83,15 @@ INSTRUCTIONS = (
 # - use_hyde: generate hypothetical answer for retrieval query
 # - reranker_model: None to disable, or CrossEncoder model string
 # - use_score_fusion: combine retriever score + reranker score
-CONFIGS: List[Dict[str, Any]] = [
-    # Baseline winner region.
-    {"chunk_size": 256, "chunk_overlap": 64, "k": 20, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
-    # Increase candidate pool for better recall.
-    {"chunk_size": 256, "chunk_overlap": 64, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
-    {"chunk_size": 256, "chunk_overlap": 64, "k": 50, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
-    # Similarity vs MMR retrieval.
-    {"chunk_size": 256, "chunk_overlap": 64, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "similarity", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
-    # Let more reranked docs through.
-    {"chunk_size": 256, "chunk_overlap": 64, "k": 40, "top_n": 8, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
-    # Chunk neighborhood around 256/64.
-    {"chunk_size": 224, "chunk_overlap": 56, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
-    {"chunk_size": 288, "chunk_overlap": 72, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
-    # Fusion weight sweep.
-    {"chunk_size": 256, "chunk_overlap": 64, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": True, "fusion_rerank_weight": 0.8},
-    {"chunk_size": 256, "chunk_overlap": 64, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": True, "fusion_rerank_weight": 0.6},
-    # HyDE under strong retrieval settings.
-    {"chunk_size": 256, "chunk_overlap": 64, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": True, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
-]
+CONFIGS = [
+    # Best so far (baseline)
+    {"chunk_size": 288, "chunk_overlap": 72, "k": 40, "top_n": 8, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
 
+    # GTE large embedding
+    {"chunk_size": 288, "chunk_overlap": 72, "k": 40, "top_n": 8, "embed_model": "thenlper/gte-large", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
+    # BGE large + HyDE
+    {"chunk_size": 288, "chunk_overlap": 72, "k": 40, "top_n": 8, "embed_model": "BAAI/bge-large-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": True, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False}
+]
 
 _FILE_CACHE: dict[str, str] = {}
 _RERANKERS: dict[str, CrossEncoder] = {}
