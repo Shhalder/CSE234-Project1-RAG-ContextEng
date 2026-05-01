@@ -1,8 +1,30 @@
 import json
 import os
 import sys
+import importlib
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
+
+import tiktoken
+from datasets import Dataset
+from langchain_community.document_loaders import DirectoryLoader, TextLoader
+from langchain_core.documents import Document
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from openai import OpenAI
+from rapidfireai import Experiment
+from rapidfireai.automl import RFOpenAIAPIModelConfig, RFLangChainRagSpec
+from sentence_transformers import CrossEncoder
+
+from metrics.project1_eval import to_spans
+
+# Ensure modules that import top-level `project1_eval` resolve correctly.
+sys.modules["project1_eval"] = importlib.import_module("metrics.project1_eval")
+
+from metrics.rapidfire_integration_example import (
+    sample_accumulate_metrics_fn,
+    sample_compute_metrics_fn,
+)
 
 # Ensure repo root is importable
 ROOT_DIR = Path(__file__).resolve().parent
@@ -18,20 +40,6 @@ existing_pythonpath = os.environ.get("PYTHONPATH", "")
 pythonpath_parts = [p for p in existing_pythonpath.split(os.pathsep) if p]
 if str(METRICS_DIR) not in pythonpath_parts:
     os.environ["PYTHONPATH"] = os.pathsep.join([str(METRICS_DIR), *pythonpath_parts])
-
-from datasets import Dataset
-from langchain_community.document_loaders import DirectoryLoader, TextLoader
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from rapidfireai import Experiment
-from rapidfireai.automl import RFOpenAIAPIModelConfig, RFLangChainRagSpec
-
-from metrics.project1_eval import to_spans
-from metrics.rapidfire_integration_example import (
-    sample_accumulate_metrics_fn,
-    sample_compute_metrics_fn,
-)
-
 
 # Triton API key
 TRITON_API_KEY = os.getenv("TRITON_API_KEY")
@@ -56,25 +64,188 @@ JUDGE_BASE_URL = os.getenv("JUDGE_BASE_URL", "https://tritonai-api.ucsd.edu/v1")
 os.environ["JUDGE_MODEL"] = JUDGE_MODEL
 os.environ["JUDGE_BASE_URL"] = JUDGE_BASE_URL
 
-# 8 configs: vary chunking, top-k, and embedding model.
+# Mirror main.py defaults for context construction.
+TOTAL_BUDGET_TOKENS = 2000
+RESERVED_NON_CONTEXT_TOKENS = 400
+MAX_CONTEXT_TOKENS = TOTAL_BUDGET_TOKENS - RESERVED_NON_CONTEXT_TOKENS
+TOKENIZER = tiktoken.get_encoding("gpt2")
+INSTRUCTIONS = (
+    "You are a technical documentation assistant.\n"
+    "Answer the user's question using only the provided context chunks.\n\n"
+    "Rules:\n"
+    "- If the context is insufficient, say you do not know based on the provided context.\n"
+    "- Keep the answer concise and factual.\n"
+    "- Do not invent APIs, arguments, or behaviors not supported by context."
+)
+
+# Configurable eval designs:
+# - retrieval_backend: "faiss" or "hnsw"
+# - use_hyde: generate hypothetical answer for retrieval query
+# - reranker_model: None to disable, or CrossEncoder model string
+# - use_score_fusion: combine retriever score + reranker score
 CONFIGS: List[Dict[str, Any]] = [
-    {"chunk_size": 256, "chunk_overlap": 32, "k": 5, "embed_model": "sentence-transformers/all-MiniLM-L6-v2"},
-    {"chunk_size": 512, "chunk_overlap": 32, "k": 5, "embed_model": "sentence-transformers/all-MiniLM-L6-v2"},
-    {"chunk_size": 1024, "chunk_overlap": 32, "k": 5, "embed_model": "sentence-transformers/all-MiniLM-L6-v2"},
-    {"chunk_size": 512, "chunk_overlap": 64, "k": 5, "embed_model": "sentence-transformers/all-MiniLM-L6-v2"},
-    {"chunk_size": 512, "chunk_overlap": 32, "k": 3, "embed_model": "sentence-transformers/all-MiniLM-L6-v2"},
-    {"chunk_size": 512, "chunk_overlap": 32, "k": 10, "embed_model": "sentence-transformers/all-MiniLM-L6-v2"},
-    {"chunk_size": 512, "chunk_overlap": 32, "k": 5, "embed_model": "BAAI/bge-small-en-v1.5"},
-    {"chunk_size": 256, "chunk_overlap": 64, "k": 10, "embed_model": "BAAI/bge-small-en-v1.5"},
+    # Baseline winner region.
+    {"chunk_size": 256, "chunk_overlap": 64, "k": 20, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
+    # Increase candidate pool for better recall.
+    {"chunk_size": 256, "chunk_overlap": 64, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
+    {"chunk_size": 256, "chunk_overlap": 64, "k": 50, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
+    # Similarity vs MMR retrieval.
+    {"chunk_size": 256, "chunk_overlap": 64, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "similarity", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
+    # Let more reranked docs through.
+    {"chunk_size": 256, "chunk_overlap": 64, "k": 40, "top_n": 8, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
+    # Chunk neighborhood around 256/64.
+    {"chunk_size": 224, "chunk_overlap": 56, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
+    {"chunk_size": 288, "chunk_overlap": 72, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
+    # Fusion weight sweep.
+    {"chunk_size": 256, "chunk_overlap": 64, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": True, "fusion_rerank_weight": 0.8},
+    {"chunk_size": 256, "chunk_overlap": 64, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": False, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": True, "fusion_rerank_weight": 0.6},
+    # HyDE under strong retrieval settings.
+    {"chunk_size": 256, "chunk_overlap": 64, "k": 40, "top_n": 5, "embed_model": "BAAI/bge-small-en-v1.5", "search_type": "mmr", "retrieval_backend": "faiss", "use_hyde": True, "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2", "use_score_fusion": False},
 ]
 
+
 _FILE_CACHE: dict[str, str] = {}
+_RERANKERS: dict[str, CrossEncoder] = {}
+_HYDE_CLIENT: Optional[OpenAI] = None
 
 
 def _get_text(path: str) -> str:
     if path not in _FILE_CACHE:
         _FILE_CACHE[path] = Path(path).read_text(encoding="utf-8")
     return _FILE_CACHE[path]
+
+
+def _get_reranker(model_name: str) -> CrossEncoder:
+    if model_name not in _RERANKERS:
+        _RERANKERS[model_name] = CrossEncoder(model_name)
+    return _RERANKERS[model_name]
+
+
+def _get_hyde_client() -> OpenAI:
+    global _HYDE_CLIENT
+    if _HYDE_CLIENT is None:
+        _HYDE_CLIENT = OpenAI(
+            api_key=TRITON_API_KEY,
+            base_url="https://tritonai-api.ucsd.edu",
+            max_retries=2,
+        )
+    return _HYDE_CLIENT
+
+
+def custom_template(doc: Document) -> str:
+    return f"{doc.metadata.get('source', '')}: {doc.page_content}"
+
+
+def count_tokens(text: str) -> int:
+    return len(TOKENIZER.encode(text))
+
+
+def clip_docs_to_context_budget(docs: List[Document]) -> tuple[str, List[Document]]:
+    selected_docs: List[Document] = []
+    context_parts: List[str] = []
+    used_tokens = 0
+    sep_tokens = count_tokens("\n\n")
+
+    for doc in docs:
+        part = custom_template(doc)
+        part_tokens = count_tokens(part)
+        additional = part_tokens + (sep_tokens if context_parts else 0)
+
+        if used_tokens + additional > MAX_CONTEXT_TOKENS:
+            break
+
+        context_parts.append(part)
+        selected_docs.append(doc)
+        used_tokens += additional
+
+    if not context_parts and docs:
+        first = custom_template(docs[0])
+        clipped = TOKENIZER.decode(TOKENIZER.encode(first)[:MAX_CONTEXT_TOKENS])
+        context_parts = [clipped]
+        selected_docs = [docs[0]]
+
+    return "\n\n".join(context_parts), selected_docs
+
+
+def _retriever_score(doc: Document, fallback_rank: int) -> float:
+    md = doc.metadata or {}
+    for key in ("score", "relevance_score", "similarity"):
+        if key in md:
+            try:
+                return float(md[key])
+            except Exception:
+                pass
+    if "distance" in md:
+        try:
+            return -float(md["distance"])
+        except Exception:
+            pass
+    return 1.0 / (1 + fallback_rank)
+
+
+def _apply_rerank(
+    query: str,
+    docs: List[Document],
+    reranker_model: Optional[str],
+    top_n: int,
+    use_score_fusion: bool,
+    fusion_rerank_weight: float = 0.7,
+) -> List[Document]:
+    if not docs:
+        return docs
+    if not reranker_model:
+        return docs[:top_n]
+
+    reranker = _get_reranker(reranker_model)
+    pairs = [[query, d.page_content] for d in docs]
+    rr_scores = list(reranker.predict(pairs))
+
+    if not use_score_fusion:
+        ranked = sorted(zip(rr_scores, docs), key=lambda x: x[0], reverse=True)
+        return [d for _, d in ranked[:top_n]]
+
+    # Simple min-max normalized fusion.
+    retr_scores = [_retriever_score(d, i) for i, d in enumerate(docs)]
+
+    def normalize(vals: List[float]) -> List[float]:
+        vmin, vmax = min(vals), max(vals)
+        if vmax - vmin < 1e-12:
+            return [0.5] * len(vals)
+        return [(v - vmin) / (vmax - vmin) for v in vals]
+
+    n_rr = normalize([float(x) for x in rr_scores])
+    n_rt = normalize([float(x) for x in retr_scores])
+    rw = max(0.0, min(1.0, float(fusion_rerank_weight)))
+    tw = 1.0 - rw
+    fused = [rw * rr + tw * rt for rr, rt in zip(n_rr, n_rt)]
+
+    ranked = sorted(zip(fused, docs), key=lambda x: x[0], reverse=True)
+    return [d for _, d in ranked[:top_n]]
+
+
+def _hyde_query(query: str, cfg: Dict[str, Any]) -> str:
+    if not cfg.get("use_hyde", False):
+        return query
+
+    prompt = (
+        "Write a concise hypothetical answer passage that would likely contain facts "
+        "needed to answer the question. Do not mention uncertainty.\n\n"
+        f"Question: {query}\n\nPassage:"
+    )
+    try:
+        client = _get_hyde_client()
+        response = client.chat.completions.create(
+            model=MODEL_NAME,
+            messages=[
+                {"role": "system", "content": "You produce retrieval-oriented hypothetical passages."},
+                {"role": "user", "content": prompt},
+            ],
+            max_completion_tokens=180,
+        )
+        hyde_text = (response.choices[0].message.content or "").strip()
+        return hyde_text or query
+    except Exception:
+        return query
 
 
 def docs_to_spans(docs: List[Any]) -> List[tuple[str, int, int]]:
@@ -98,32 +269,52 @@ def docs_to_spans(docs: List[Any]) -> List[tuple[str, int, int]]:
     return spans
 
 
-def preprocess_fn(batch: Dict[str, list], rag: RFLangChainRagSpec, prompt_manager=None) -> Dict[str, list]:
-    all_docs = rag.get_context(batch_queries=batch["query"], serialize=False)
-    serialized_context = rag.serialize_documents(all_docs)
-    retrieved_spans = [docs_to_spans(docs) for docs in all_docs]
+def make_preprocess_fn(cfg: Dict[str, Any]):
+    def preprocess_fn(batch: Dict[str, list], rag: RFLangChainRagSpec, prompt_manager=None) -> Dict[str, list]:
+        queries = batch["query"]
+        retrieval_queries = [_hyde_query(q, cfg) for q in queries]
 
-    # Convert JSON-safe spans back to tuple spans for metric functions.
-    ground_truth_spans = [
-        [tuple(span) for span in json.loads(s)]
-        for s in batch["ground_truth_spans_json"]
-    ]
-
-    prompts = [
-        [
-            {"role": "system", "content": "Answer the question using only the provided context."},
-            {"role": "user", "content": f"Question:\n{q}\n\nContext:\n{ctx}\n\nAnswer:"},
+        all_docs = rag.get_context(batch_queries=retrieval_queries, serialize=False)
+        reranked_docs = [
+            _apply_rerank(
+                query=q,
+                docs=docs,
+                reranker_model=cfg.get("reranker_model"),
+                top_n=int(cfg.get("top_n", 5)),
+                use_score_fusion=bool(cfg.get("use_score_fusion", False)),
+                fusion_rerank_weight=float(cfg.get("fusion_rerank_weight", 0.7)),
+            )
+            for q, docs in zip(queries, all_docs)
         ]
-        for q, ctx in zip(batch["query"], serialized_context)
-    ]
 
-    return {
-        "prompts": prompts,
-        "serialized_context": serialized_context,
-        "retrieved_spans": retrieved_spans,
-        "ground_truth_spans": ground_truth_spans,
-        **batch,
-    }
+        serialized_context: List[str] = []
+        kept_docs_per_query: List[List[Document]] = []
+        for docs in reranked_docs:
+            clipped_context, kept_docs = clip_docs_to_context_budget(docs)
+            serialized_context.append(clipped_context)
+            kept_docs_per_query.append(kept_docs)
+
+        retrieved_spans = [docs_to_spans(docs) for docs in kept_docs_per_query]
+
+        ground_truth_spans = [[tuple(span) for span in json.loads(s)] for s in batch["ground_truth_spans_json"]]
+
+        prompts = [
+            [
+                {"role": "system", "content": INSTRUCTIONS},
+                {"role": "user", "content": f"Question:\n{q}\n\nContext:\n{ctx}\n\nAnswer:"},
+            ]
+            for q, ctx in zip(queries, serialized_context)
+        ]
+
+        return {
+            "prompts": prompts,
+            "serialized_context": serialized_context,
+            "retrieved_spans": retrieved_spans,
+            "ground_truth_spans": ground_truth_spans,
+            **batch,
+        }
+
+    return preprocess_fn
 
 
 def load_eval_dataset(
@@ -150,6 +341,13 @@ def load_eval_dataset(
     return Dataset.from_list(rows)
 
 
+def _vector_store_cfg_for(cfg: Dict[str, Any]) -> Dict[str, Any]:
+    if cfg.get("retrieval_backend") == "hnsw":
+        # Best-effort HNSW config; unsupported fields are ignored by some backends.
+        return {"type": "faiss", "index_factory": "HNSW32", "metric": "ip"}
+    return {"type": "faiss"}
+
+
 def make_eval_config(cfg: Dict[str, Any]) -> Dict[str, Any]:
     rag = RFLangChainRagSpec(
         document_loader=DirectoryLoader(
@@ -171,9 +369,10 @@ def make_eval_config(cfg: Dict[str, Any]) -> Dict[str, Any]:
             "model_kwargs": {"device": "cpu"},
             "encode_kwargs": {"normalize_embeddings": True},
         },
-        vector_store_cfg={"type": "faiss"},
-        search_cfg={"type": "similarity", "k": cfg["k"]},
+        vector_store_cfg=_vector_store_cfg_for(cfg),
+        search_cfg={"type": cfg.get("search_type", "mmr"), "k": int(cfg.get("k", 20))},
         enable_gpu_search=False,
+        document_template=custom_template,
     )
 
     openai_config = RFOpenAIAPIModelConfig(
@@ -195,7 +394,7 @@ def make_eval_config(cfg: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "pipeline": openai_config,
         "batch_size": 8,
-        "preprocess_fn": preprocess_fn,
+        "preprocess_fn": make_preprocess_fn(cfg),
         "compute_metrics_fn": sample_compute_metrics_fn,
         "accumulate_metrics_fn": sample_accumulate_metrics_fn,
         "online_strategy_kwargs": {
@@ -204,37 +403,6 @@ def make_eval_config(cfg: Dict[str, Any]) -> Dict[str, Any]:
             "use_fpc": True,
         },
     }
-
-
-def _metric_value(row: Dict[str, Any], key: str) -> Any:
-    value = row.get(key)
-    if isinstance(value, dict):
-        return value.get("value")
-    return value
-
-
-def _extract_run_rows(obj: Any) -> List[Dict[str, Any]]:
-    """Recursively extract eval run records from nested run_evals outputs."""
-    rows: List[Dict[str, Any]] = []
-    metric_markers = {
-        "F1@5",
-        "Precision@5",
-        "Recall@5",
-        "Retrieval Score",
-        "Generation Score (3 released)",
-    }
-
-    if isinstance(obj, dict):
-        # Different RapidFire versions may omit run_id in per-run rows.
-        if "run_id" in obj or any(k in obj for k in metric_markers):
-            rows.append(obj)
-        for v in obj.values():
-            rows.extend(_extract_run_rows(v))
-    elif isinstance(obj, list):
-        for item in obj:
-            rows.extend(_extract_run_rows(item))
-
-    return rows
 
 
 def main() -> None:
@@ -260,20 +428,13 @@ def main() -> None:
         encoding="utf-8",
     )
 
-    # Compact metrics-only summary (easy to read without CSV tooling)
     summary_rows: List[Dict[str, Any]] = []
-
+    metric_rows = []
     if isinstance(results, dict):
-        run_items = sorted(
-            results.items(),
-            key=lambda kv: int(kv[0]) if str(kv[0]).isdigit() else str(kv[0]),
-        )
-        metric_rows = []
+        run_items = sorted(results.items(), key=lambda kv: int(kv[0]) if str(kv[0]).isdigit() else str(kv[0]))
         for run_key, run_val in run_items:
             if isinstance(run_val, list) and len(run_val) >= 2 and isinstance(run_val[1], dict):
                 metric_rows.append((run_key, run_val[1]))
-    else:
-        metric_rows = []
 
     for run_key, r in metric_rows:
         summary_rows.append(
@@ -283,6 +444,7 @@ def main() -> None:
                 "chunk_overlap": (r.get("chunk_overlap", {}) or {}).get("value"),
                 "search_cfg": (r.get("search_cfg", {}) or {}).get("value"),
                 "embedding_model": ((r.get("embedding_cfg", {}) or {}).get("value") or {}).get("model_name"),
+                "vector_store_cfg": (r.get("vector_store_cfg", {}) or {}).get("value"),
                 "F1@5": (r.get("F1@5", {}) or {}).get("value"),
                 "Precision@5": (r.get("Precision@5", {}) or {}).get("value"),
                 "Recall@5": (r.get("Recall@5", {}) or {}).get("value"),
@@ -291,6 +453,10 @@ def main() -> None:
                 "Faithfulness (pass rate)": (r.get("Faithfulness (pass rate)", {}) or {}).get("value"),
                 "Completeness (normalized)": (r.get("Completeness (normalized)", {}) or {}).get("value"),
                 "Generation Score (3 released)": (r.get("Generation Score (3 released)", {}) or {}).get("value"),
+                "use_hyde": CONFIGS[int(run_key) - 1].get("use_hyde") if str(run_key).isdigit() else None,
+                "reranker_model": CONFIGS[int(run_key) - 1].get("reranker_model") if str(run_key).isdigit() else None,
+                "use_score_fusion": CONFIGS[int(run_key) - 1].get("use_score_fusion") if str(run_key).isdigit() else None,
+                "retrieval_backend": CONFIGS[int(run_key) - 1].get("retrieval_backend") if str(run_key).isdigit() else None,
             }
         )
 
@@ -306,7 +472,7 @@ def main() -> None:
 
     experiment.end()
 
-    print("Completed run_evals for 8 configs.")
+    print(f"Completed run_evals for {len(CONFIGS)} configs.")
     print("Saved logs/run_evals_results.json and logs/run_evals_summary.json")
 
 
