@@ -1,0 +1,871 @@
+[
+  {
+    "question_id": 1,
+    "answer": "For the `Range(start, end, dtype)` knob generator, the allowed `dtype` values are `\"int\"` or `\"float\"`. The sampling behavior for values inside the interval is uniform sampling.",
+    "sources": [
+      {
+        "file": "configs.rst",
+        "lines": [
+          20,
+          160
+        ]
+      },
+      {
+        "file": "configs.rst",
+        "lines": [
+          45,
+          66
+        ]
+      },
+      {
+        "file": "configs.rst",
+        "lines": [
+          21,
+          160
+        ]
+      },
+      {
+        "file": "generators.rst",
+        "lines": [
+          32,
+          41
+        ]
+      },
+      {
+        "file": "configs.rst",
+        "lines": [
+          1,
+          24
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 2,
+    "answer": "Based on the provided context, if you run `run_evals()` on a machine with no GPUs, the default behavior for `num_actors` is not explicitly stated. However, it is recommended to set the maximum value to 16 if the machine has no GPUs.",
+    "sources": [
+      {
+        "file": "experiment.rst",
+        "lines": [
+          17,
+          280
+        ]
+      },
+      {
+        "file": "models.rst",
+        "lines": [
+          130,
+          141
+        ]
+      },
+      {
+        "file": "experiment.rst",
+        "lines": [
+          127,
+          143
+        ]
+      },
+      {
+        "file": "experiment.rst",
+        "lines": [
+          27,
+          280
+        ]
+      },
+      {
+        "file": "evalsfunctions.rst",
+        "lines": [
+          1,
+          25
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 3,
+    "answer": "The two LangChain selector classes explicitly allowed for `RFPromptManager.example_selector_cls` are `SemanticSimilarityExampleSelector` and `MaxMarginalRelevanceExampleSelector`.",
+    "sources": [
+      {
+        "file": "promptothers.rst",
+        "lines": [
+          30,
+          37
+        ]
+      },
+      {
+        "file": "promptothers.rst",
+        "lines": [
+          1,
+          20
+        ]
+      },
+      {
+        "file": "promptothers.rst",
+        "lines": [
+          44,
+          70
+        ]
+      },
+      {
+        "file": "configs.rst",
+        "lines": [
+          10,
+          160
+        ]
+      },
+      {
+        "file": "evalsfunctions.rst",
+        "lines": [
+          79,
+          100
+        ]
+      },
+      {
+        "file": "promptothers.rst",
+        "lines": [
+          11,
+          100
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 4,
+    "answer": "The two rate-limit fields provided for API throttling in RFOpenAIAPIModelConfig are `rpm_limit` and `tpm_limit`. The `rpm_limit` is measured in requests per minute, and the `tpm_limit` is measured in tokens per minute.",
+    "sources": [
+      {
+        "file": "generators.rst",
+        "lines": [
+          109,
+          121
+        ]
+      },
+      {
+        "file": "configs.rst",
+        "lines": [
+          142,
+          160
+        ]
+      },
+      {
+        "file": "configs.rst",
+        "lines": [
+          10,
+          160
+        ]
+      },
+      {
+        "file": "generators.rst",
+        "lines": [
+          80,
+          91
+        ]
+      },
+      {
+        "file": "generators.rst",
+        "lines": [
+          130,
+          146
+        ]
+      },
+      {
+        "file": "generators.rst",
+        "lines": [
+          91,
+          101
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 5,
+    "answer": "In the dashboard Chart view, the x-axis \"Step\" represents the absolute number of minibatches seen by a run for minibatch-level plots, and the absolute number of epochs seen by a run for epoch-level plots. This explains why curves may end at different step counts across runs because different runs might have different batch sizes or numbers of epochs, causing them to take different numbers of steps.",
+    "sources": [
+      {
+        "file": "dashboard.rst",
+        "lines": [
+          65,
+          76
+        ]
+      },
+      {
+        "file": "dashboard.rst",
+        "lines": [
+          39,
+          65
+        ]
+      },
+      {
+        "file": "dashboard.rst",
+        "lines": [
+          13,
+          105
+        ]
+      },
+      {
+        "file": "glossary.rst",
+        "lines": [
+          100,
+          131
+        ]
+      },
+      {
+        "file": "trainers.rst",
+        "lines": [
+          42,
+          63
+        ]
+      },
+      {
+        "file": "experiment.rst",
+        "lines": [
+          18,
+          280
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 6,
+    "answer": "Based on the provided context, \"live three-way communication\" in RapidFire refers to the real-time interaction between three components:\n\n1. The IDE (Integrated Development Environment) where the experiment is launched\n2. A metrics display/control dashboard\n3. A multi-core/multi-GPU execution backend\n\nThese three components communicate with each other in real-time to enable dynamic control and monitoring of AI experiments.",
+    "sources": [
+      {
+        "file": "overview.rst",
+        "lines": [
+          1,
+          20
+        ]
+      },
+      {
+        "file": "difference.rst",
+        "lines": [
+          17,
+          36
+        ]
+      },
+      {
+        "file": "dashboard.rst",
+        "lines": [
+          85,
+          105
+        ]
+      },
+      {
+        "file": "difference.rst",
+        "lines": [
+          89,
+          94
+        ]
+      },
+      {
+        "file": "configs.rst",
+        "lines": [
+          1,
+          24
+        ]
+      },
+      {
+        "file": "onlineagg.rst",
+        "lines": [
+          241,
+          253
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 7,
+    "answer": "If a custom eval metric is returned without algebraic/distributive type metadata, online aggregation will display it as is, without projected estimates or confidence intervals. This is because metrics without a defined type cannot be processed for online aggregation, so they are shown in their raw form.",
+    "sources": [
+      {
+        "file": "evalsfunctions.rst",
+        "lines": [
+          312,
+          326
+        ]
+      },
+      {
+        "file": "promptothers.rst",
+        "lines": [
+          92,
+          100
+        ]
+      },
+      {
+        "file": "onlineagg.rst",
+        "lines": [
+          71,
+          76
+        ]
+      },
+      {
+        "file": "evalsfunctions.rst",
+        "lines": [
+          282,
+          301
+        ]
+      },
+      {
+        "file": "onlineagg.rst",
+        "lines": [
+          1,
+          20
+        ]
+      },
+      {
+        "file": "onlineagg.rst",
+        "lines": [
+          34,
+          49
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 8,
+    "answer": "The adaptive execution engine in RapidFire AI allows you to observe all model configurations (configs) earlier than sequential execution by operating on shards of the dataset. Instead of waiting for a run to see the whole dataset for all epochs, RapidFire AI schedules all runs on one shard at a time and cycles through all shards. This approach enables you to see the learning behaviors of all configurations on the first few chunks before any configuration completes its full run. For example, before model config 3 (M3) even starts in the sequential approach, RapidFire AI already shows you the learning behaviors of all 3 configs on the first 2-3 chunks.\n\nThe overhead tradeoff documented is minimal, with the overhead of swapping represented by a thin gray box in the provided figures. This overhead is less than 5% of the runtime, thanks to efficient memory management techniques.",
+    "sources": [
+      {
+        "file": "difference.rst",
+        "lines": [
+          17,
+          36
+        ]
+      },
+      {
+        "file": "overview.rst",
+        "lines": [
+          33,
+          53
+        ]
+      },
+      {
+        "file": "difference.rst",
+        "lines": [
+          89,
+          94
+        ]
+      },
+      {
+        "file": "difference.rst",
+        "lines": [
+          1,
+          15
+        ]
+      },
+      {
+        "file": "difference.rst",
+        "lines": [
+          18,
+          94
+        ]
+      },
+      {
+        "file": "difference.rst",
+        "lines": [
+          50,
+          64
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 9,
+    "answer": "Based on the provided context, a \"config group generator\" in RapidFire workflows is a method that generates a group of config dictionaries based on an input config dictionary with set-valued knobs (like `List` or `Range`). Currently, the supported generators are `RFGridSearch` and `RFRandomSearch`.\n\nA \"config group,\" on the other hand, is a set of config dictionary instances produced in bulk by providing a config dictionary with set-valued knobs to a config-group generator method. It can also be a Python list of individual config dictionaries or config-group generators recursively.\n\nIn summary, a \"config group generator\" is the method that creates the group, while a \"config group\" is the resulting set of configurations.",
+    "sources": [
+      {
+        "file": "configs.rst",
+        "lines": [
+          45,
+          66
+        ]
+      },
+      {
+        "file": "glossary.rst",
+        "lines": [
+          22,
+          133
+        ]
+      },
+      {
+        "file": "configs.rst",
+        "lines": [
+          1,
+          24
+        ]
+      },
+      {
+        "file": "experiment.rst",
+        "lines": [
+          116,
+          125
+        ]
+      },
+      {
+        "file": "generators.rst",
+        "lines": [
+          1,
+          14
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 10,
+    "answer": "In a RAG setup where no retriever and no vector_store_cfg are supplied but preprocessing is needed, the following defaults are created automatically:\n\n- A default FAISS vector store (and retriever) is built from documents.\n\nRequired inputs:\n- :code:`document_loader` is required.\n\nOptional inputs:\n- :code:`text_splitter` is optional. You may embed whole documents without chunking if you omit this.\n- :code:`search_cfg` is optional. If not provided, a default search configuration is used.\n- :code:`reranker_cfg` is optional. If not provided, no reranking is applied.",
+    "sources": [
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          372,
+          378
+        ]
+      },
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          37,
+          43
+        ]
+      },
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          12,
+          390
+        ]
+      },
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          13,
+          390
+        ]
+      },
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          14,
+          390
+        ]
+      },
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          56,
+          61
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 11,
+    "answer": "To run RapidFire using only GPU indices 0 and 2, you need to set the `CUDA_VISIBLE_DEVICES` environment variable to \"0,2\" before starting RapidFire. This should be done in the terminal or in your Python script before importing/starting RapidFire.\n\nHere is the documented way to do it:\n\n```bash\nexport CUDA_VISIBLE_DEVICES=0,2\nrapidfireai start\n```\n\nOr in a Python script:\n\n```python\nimport os\nos.environ[\"CUDA_VISIBLE_DEVICES\"] = \"0,2\"\n# then start your RapidFire workflow\n```",
+    "sources": [
+      {
+        "file": "troubleshooting.rst",
+        "lines": [
+          59,
+          82
+        ]
+      },
+      {
+        "file": "walkthroughrag.rst",
+        "lines": [
+          21,
+          302
+        ]
+      },
+      {
+        "file": "walkthroughft.rst",
+        "lines": [
+          146,
+          166
+        ]
+      },
+      {
+        "file": "icops.rst",
+        "lines": [
+          84,
+          107
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 12,
+    "answer": "To initialize a RAG eval workflow that uses only OpenAI APIs, run the following command:\n\n```bash\nrapidfireai init --evals\n```\n\nYou can skip starting the RapidFire server if you do not need to see results on the ML metrics dashboard. Starting the server is optional for RAG/context engineering experiments with `run_evals()`.",
+    "sources": [
+      {
+        "file": "difference.rst",
+        "lines": [
+          66,
+          87
+        ]
+      },
+      {
+        "file": "walkthroughrag.rst",
+        "lines": [
+          48,
+          75
+        ]
+      },
+      {
+        "file": "walkthroughrag.rst",
+        "lines": [
+          24,
+          302
+        ]
+      },
+      {
+        "file": "walkthroughrag.rst",
+        "lines": [
+          27,
+          302
+        ]
+      },
+      {
+        "file": "walkthroughrag.rst",
+        "lines": [
+          93,
+          108
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 13,
+    "answer": "The sequence of commands to initialize and start services after installing in a fresh venv is:\n\n1. `rapidfireai init --evals` (for RAG evals)\n2. `rapidfireai start`\n\nYou should rerun `rapidfireai init` only once for a new venv or when switching GPU(s) on your machine. You do not need to run it after a reboot, start/stop of rapidfireai, or for a new terminal.",
+    "sources": [
+      {
+        "file": "walkthroughrag.rst",
+        "lines": [
+          48,
+          75
+        ]
+      },
+      {
+        "file": "walkthroughft.rst",
+        "lines": [
+          21,
+          338
+        ]
+      },
+      {
+        "file": "walkthroughrag.rst",
+        "lines": [
+          21,
+          302
+        ]
+      },
+      {
+        "file": "troubleshooting.rst",
+        "lines": [
+          1,
+          38
+        ]
+      },
+      {
+        "file": "walkthroughft.rst",
+        "lines": [
+          65,
+          92
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 14,
+    "answer": "The documentation recommends the following function-signature pattern to stay compatible with TRL-injected arguments when your GRPO reward function only needs completions:\n\n```python\ndef reward_function(completions, **kwargs) -> list[float]:\n```\n\nThe return type required is a list of floats, one per completion.",
+    "sources": [
+      {
+        "file": "fitfunctions.rst",
+        "lines": [
+          23,
+          235
+        ]
+      },
+      {
+        "file": "fitfunctions.rst",
+        "lines": [
+          210,
+          222
+        ]
+      },
+      {
+        "file": "fitfunctions.rst",
+        "lines": [
+          132,
+          161
+        ]
+      },
+      {
+        "file": "models.rst",
+        "lines": [
+          118,
+          128
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 15,
+    "answer": "Based on the provided context, when a human is not in the loop, the issues page recommends using semi-automated IC Ops triggered by application logic in code instead of manual dashboard IC Ops triggering. The code should use the runs' metrics and progress so far to specify custom semi-automation logic for IC Ops.",
+    "sources": [
+      {
+        "file": "issues.rst",
+        "lines": [
+          50,
+          65
+        ]
+      },
+      {
+        "file": "icops.rst",
+        "lines": [
+          179,
+          188
+        ]
+      },
+      {
+        "file": "icops.rst",
+        "lines": [
+          32,
+          56
+        ]
+      },
+      {
+        "file": "icops.rst",
+        "lines": [
+          84,
+          107
+        ]
+      },
+      {
+        "file": "icops.rst",
+        "lines": [
+          1,
+          18
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 16,
+    "answer": "Based on the provided context, the main difference in FSDP support between RFDPOConfig and RFGRPOConfig is the value of the \"offload_params\" parameter in the fsdp_config:\n\n- In RFDPOConfig, \"offload_params\" is set to False.\n- The context does not explicitly show the fsdp_config for RFGRPOConfig, so I cannot confirm its value for \"offload_params\".\n\nThe context also mentions that both configurations support FSDP for larger LLMs that need cross-GPU partitioning, with similar fsdp_config parameters like \"backward_prefetch\", \"forward_prefetch\", \"use_orig_params\", \"cpu_ram_efficient_loading\", \"sync_module_states\", \"limit_all_gathers\", \"sharding_strategy\", and \"auto_wrap_policy\".",
+    "sources": [
+      {
+        "file": "trainers.rst",
+        "lines": [
+          82,
+          107
+        ]
+      },
+      {
+        "file": "trainers.rst",
+        "lines": [
+          172,
+          188
+        ]
+      },
+      {
+        "file": "trainers.rst",
+        "lines": [
+          146,
+          173
+        ]
+      },
+      {
+        "file": "trainers.rst",
+        "lines": [
+          18,
+          212
+        ]
+      },
+      {
+        "file": "models.rst",
+        "lines": [
+          158,
+          169
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 17,
+    "answer": "The tutorials page splits examples between RAG/context-engineering and fine-tuning/post-training as follows:\n\n- **RAG and Context Engineering**: Examples include FiQA RAG Q&A chatbot, SciFact RAG for scientific claim verification, and GSM8K few-shot/context engineering for math reasoning.\n- **Fine-Tuning and Post-Training**: Examples include SFT, DPO, and GRPO control flows.\n\nThe control flows listed in the fine-tuning and post-training section are SFT, DPO, and GRPO.",
+    "sources": [
+      {
+        "file": "tutorials.rst",
+        "lines": [
+          1,
+          28
+        ]
+      },
+      {
+        "file": "tutorials.rst",
+        "lines": [
+          17,
+          43
+        ]
+      },
+      {
+        "file": "rag_gsm8k.rst",
+        "lines": [
+          1,
+          21
+        ]
+      },
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          13,
+          390
+        ]
+      },
+      {
+        "file": "ragcontexteng.rst",
+        "lines": [
+          1,
+          9
+        ]
+      },
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          385,
+          389
+        ]
+      },
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          17,
+          33
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 18,
+    "answer": "Based on the provided context:\n\n- **Setup Time**:\n  - Google Colab: Takes under 3 minutes for SFT/RFT and under 2 minutes for RAG/Context Engineering.\n  - Full Installation: Requires more time for setup, including installing dependencies and the package.\n\n- **Capability Limits**:\n  - Google Colab: Limited to small models and small datasets due to free resource constraints.\n  - Full Installation: No limitations, supports models and datasets of any size, and allows for the use of your own OpenAI keys.",
+    "sources": [
+      {
+        "file": "walkthroughft.rst",
+        "lines": [
+          1,
+          31
+        ]
+      },
+      {
+        "file": "walkthroughrag.rst",
+        "lines": [
+          1,
+          27
+        ]
+      },
+      {
+        "file": "walkthroughrag.rst",
+        "lines": [
+          27,
+          302
+        ]
+      },
+      {
+        "file": "sft.rst",
+        "lines": [
+          1,
+          17
+        ]
+      },
+      {
+        "file": "walkthroughft.rst",
+        "lines": [
+          27,
+          338
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 19,
+    "answer": "In RFLangChainRagSpec, the vector-store modes are determined as follows:\n\n- **Create mode:** When `document_loader` is provided and no pre-existing index/collection names are specified, a new vector store is created and populated from the loaded documents.\n- **Read mode:** When `document_loader` is absent and pre-existing index/collection names are specified, the vector store is opened in read-only mode for retrieval against the existing index.\n- **Update mode:** When both `document_loader` and pre-existing index/collection names are provided, the existing index/collection is updated with the new documents added to it.",
+    "sources": [
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          13,
+          390
+        ]
+      },
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          351,
+          368
+        ]
+      },
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          317,
+          335
+        ]
+      },
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          12,
+          390
+        ]
+      },
+      {
+        "file": "ragspecs.rst",
+        "lines": [
+          303,
+          313
+        ]
+      }
+    ]
+  },
+  {
+    "question_id": 20,
+    "answer": "Based on the provided context, the new dashboard capabilities described are only available in RapidFire's MLflow-fork dashboard. These features are not yet supported in TensorBoard or Trackio. The context explicitly states that \"these new features are not yet available on the other dashboards.\"",
+    "sources": [
+      {
+        "file": "dashboard.rst",
+        "lines": [
+          25,
+          105
+        ]
+      },
+      {
+        "file": "dashboard.rst",
+        "lines": [
+          1,
+          23
+        ]
+      },
+      {
+        "file": "walkthroughft.rst",
+        "lines": [
+          21,
+          338
+        ]
+      },
+      {
+        "file": "walkthroughrag.rst",
+        "lines": [
+          21,
+          302
+        ]
+      },
+      {
+        "file": "glossary.rst",
+        "lines": [
+          100,
+          131
+        ]
+      }
+    ]
+  }
+]
