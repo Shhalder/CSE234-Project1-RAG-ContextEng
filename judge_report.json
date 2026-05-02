@@ -1,0 +1,338 @@
+{
+  "meta": {
+    "model": "claude-sonnet-4-6",
+    "base_url": "https://tritonai-api.ucsd.edu/v1",
+    "n_questions": 45,
+    "n_missing_from_output": 0,
+    "n_extra_in_output": 0,
+    "n_missing_context": 0,
+    "n_judge_failures": 0,
+    "output_file": "data/validation_output.json",
+    "validation_file": "validation-set-golden-qa-pairs.json"
+  },
+  "summary": {
+    "Correctness (pass rate)": 0.8666666666666667,
+    "Faithfulness (pass rate)": 1.0,
+    "Completeness (raw, 0-5)": 3.3555555555555556,
+    "Completeness (normalized)": 0.6711111111111111,
+    "Partial Generation Score": 0.845925925925926,
+    "Partial Generation Score note": "Mean of 3 normalized released metrics. The leaderboard Generation Score averages all 5 normalized metrics (the 3 released + 2 hidden binary)."
+  },
+  "per_question": [
+    {
+      "question_id": 1,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 2,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 3,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 5,
+      "status": "ok"
+    },
+    {
+      "question_id": 4,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 4,
+      "status": "ok"
+    },
+    {
+      "question_id": 5,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 6,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 2,
+      "status": "ok"
+    },
+    {
+      "question_id": 7,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 4,
+      "status": "ok"
+    },
+    {
+      "question_id": 8,
+      "correctness": 0,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 9,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 5,
+      "status": "ok"
+    },
+    {
+      "question_id": 10,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 11,
+      "correctness": 0,
+      "faithfulness": 1,
+      "completeness": 2,
+      "status": "ok"
+    },
+    {
+      "question_id": 12,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 4,
+      "status": "ok"
+    },
+    {
+      "question_id": 13,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 14,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 4,
+      "status": "ok"
+    },
+    {
+      "question_id": 15,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 5,
+      "status": "ok"
+    },
+    {
+      "question_id": 16,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 5,
+      "status": "ok"
+    },
+    {
+      "question_id": 17,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 18,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 0,
+      "status": "ok"
+    },
+    {
+      "question_id": 19,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 20,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 21,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 4,
+      "status": "ok"
+    },
+    {
+      "question_id": 22,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 23,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 24,
+      "correctness": 0,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 25,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 26,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 4,
+      "status": "ok"
+    },
+    {
+      "question_id": 27,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 28,
+      "correctness": 0,
+      "faithfulness": 1,
+      "completeness": 1,
+      "status": "ok"
+    },
+    {
+      "question_id": 29,
+      "correctness": 0,
+      "faithfulness": 1,
+      "completeness": 0,
+      "status": "ok"
+    },
+    {
+      "question_id": 30,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 31,
+      "correctness": 0,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 32,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 33,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 4,
+      "status": "ok"
+    },
+    {
+      "question_id": 34,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 5,
+      "status": "ok"
+    },
+    {
+      "question_id": 35,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 5,
+      "status": "ok"
+    },
+    {
+      "question_id": 36,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 4,
+      "status": "ok"
+    },
+    {
+      "question_id": 37,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 38,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 5,
+      "status": "ok"
+    },
+    {
+      "question_id": 39,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    },
+    {
+      "question_id": 40,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 4,
+      "status": "ok"
+    },
+    {
+      "question_id": 41,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 4,
+      "status": "ok"
+    },
+    {
+      "question_id": 42,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 4,
+      "status": "ok"
+    },
+    {
+      "question_id": 43,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 5,
+      "status": "ok"
+    },
+    {
+      "question_id": 44,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 2,
+      "status": "ok"
+    },
+    {
+      "question_id": 45,
+      "correctness": 1,
+      "faithfulness": 1,
+      "completeness": 3,
+      "status": "ok"
+    }
+  ]
+}
