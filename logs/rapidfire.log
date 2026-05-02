@@ -1,0 +1,446 @@
+2026-04-30 17:29:16 | Experiment | INFO | experiment.py:165 | [p1-rag-evals_10:Experiment] An experiment with the same name already exists. Created a new experiment 'p1-rag-evals_10' with Experiment ID: 11 at /home/ewshen/rapidfireai/rapidfire_experiments/p1-rag-evals_10
+2026-04-30 17:29:35 | Experiment | INFO | metric_rfmetric_manager.py:55 | [p1-rag-evals_10:Experiment] Initialized MLflowMetricLogger: rf_mlflow
+2026-04-30 17:29:35 | Experiment | INFO | metric_rfmetric_manager.py:119 | [p1-rag-evals_10:Experiment] Creating MLflow experiment: p1-rag-evals_10
+2026-04-30 17:29:35 | Experiment | INFO | experiment.py:210 | [p1-rag-evals_10:Experiment] Initialized MetricLogger experiment: 11
+2026-04-30 17:29:35 | Experiment | INFO | experiment.py:226 | [p1-rag-evals_10:Experiment] Using existing dispatcher/api server at 127.0.0.1:8851.
+2026-04-30 17:29:35 | Experiment | WARNING | experiment.py:381 | [p1-rag-evals_10:Experiment] No GPUs available. Be sure to use external APIs for inference.
+2026-04-30 17:29:35 | Experiment | INFO | experiment.py:383 | [p1-rag-evals_10:Experiment] Running multi-config experiment with 4 shard(s), (0.0 GPUs per actor, 8.0 CPUs per actor, 8 actors)
+2026-04-30 17:29:35 | Experiment | INFO | experiment.py:392 | [p1-rag-evals_10:Experiment] Reset states of existing pipelines/contexts/tasks (marked as failed)
+2026-04-30 17:29:36 | Controller | INFO | controller.py:895 | [p1-rag-evals_10:Controller] Dataset sharded into 4 shard(s). Shard sizes: [5, 5, 5, 5]
+2026-04-30 17:29:36 | Controller | INFO | controller.py:900 | [p1-rag-evals_10:Controller] Received 8 pipeline configuration(s)
+2026-04-30 17:29:36 | Controller | INFO | controller.py:309 | [p1-rag-evals_10:Controller] Found 6 unique RAG context(s)
+2026-04-30 17:29:36 | Controller | INFO | controller.py:320 | [p1-rag-evals_10:Controller] Will build new context 608092d5...
+2026-04-30 17:29:36 | Controller | INFO | controller.py:320 | [p1-rag-evals_10:Controller] Will build new context 6522fb50...
+2026-04-30 17:29:36 | Controller | INFO | controller.py:320 | [p1-rag-evals_10:Controller] Will build new context 26707554...
+2026-04-30 17:29:36 | Controller | INFO | controller.py:320 | [p1-rag-evals_10:Controller] Will build new context 2ad34c0d...
+2026-04-30 17:29:36 | Controller | INFO | controller.py:320 | [p1-rag-evals_10:Controller] Will build new context 8a77f0fd...
+2026-04-30 17:29:36 | Controller | INFO | controller.py:320 | [p1-rag-evals_10:Controller] Will build new context 908c3294...
+2026-04-30 17:29:36 | Controller | INFO | controller.py:346 | [p1-rag-evals_10:Controller] Building 6 context(s) in parallel...
+2026-04-30 17:29:36 | Controller | INFO | controller.py:373 | [p1-rag-evals_10:Controller] Creating 6 DocProcessingActor(s) for parallel processing
+2026-04-30 17:29:37 | Controller | INFO | controller.py:461 | [p1-rag-evals_10:Controller] Submitted 6 build task(s) in parallel
+2026-04-30 17:29:58 | DocProcessingActor | INFO | doc_actor.py:59 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor initialized
+2026-04-30 17:29:58 | DocProcessingActor | INFO | doc_actor.py:59 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor initialized
+2026-04-30 17:29:59 | DocProcessingActor | INFO | doc_actor.py:59 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor initialized
+2026-04-30 17:29:59 | DocProcessingActor | INFO | doc_actor.py:59 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor initialized
+2026-04-30 17:29:59 | DocProcessingActor | INFO | doc_actor.py:96 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor: Starting context initialization...
+2026-04-30 17:29:59 | DocProcessingActor | INFO | doc_actor.py:107 | [p1-rag-evals_10:DocProcessingActor] Building document index...
+2026-04-30 17:30:00 | DocProcessingActor | INFO | doc_actor.py:96 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor: Starting context initialization...
+2026-04-30 17:30:00 | DocProcessingActor | INFO | doc_actor.py:107 | [p1-rag-evals_10:DocProcessingActor] Building document index...
+2026-04-30 17:30:00 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:30:00 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:30:00 | DocProcessingActor | INFO | doc_actor.py:96 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor: Starting context initialization...
+2026-04-30 17:30:00 | DocProcessingActor | INFO | doc_actor.py:107 | [p1-rag-evals_10:DocProcessingActor] Building document index...
+2026-04-30 17:30:00 | DocProcessingActor | INFO | doc_actor.py:96 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor: Starting context initialization...
+2026-04-30 17:30:00 | DocProcessingActor | INFO | doc_actor.py:107 | [p1-rag-evals_10:DocProcessingActor] Building document index...
+2026-04-30 17:30:00 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:30:00 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:30:07 | DocProcessingActor | INFO | doc_actor.py:109 | [p1-rag-evals_10:DocProcessingActor] Document index built successfully
+2026-04-30 17:30:07 | DocProcessingActor | INFO | doc_actor.py:134 | [p1-rag-evals_10:DocProcessingActor] Serializing FAISS index for cross-actor sharing...
+2026-04-30 17:30:07 | DocProcessingActor | INFO | doc_actor.py:144 | [p1-rag-evals_10:DocProcessingActor] FAISS index serialized: 128092 bytes
+2026-04-30 17:30:07 | DocProcessingActor | INFO | doc_actor.py:189 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor: Context components ready for sharing
+2026-04-30 17:30:10 | DocProcessingActor | INFO | doc_actor.py:109 | [p1-rag-evals_10:DocProcessingActor] Document index built successfully
+2026-04-30 17:30:10 | DocProcessingActor | INFO | doc_actor.py:134 | [p1-rag-evals_10:DocProcessingActor] Serializing FAISS index for cross-actor sharing...
+2026-04-30 17:30:10 | DocProcessingActor | INFO | doc_actor.py:144 | [p1-rag-evals_10:DocProcessingActor] FAISS index serialized: 240640 bytes
+2026-04-30 17:30:10 | DocProcessingActor | INFO | doc_actor.py:189 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor: Context components ready for sharing
+2026-04-30 17:30:11 | DocProcessingActor | INFO | doc_actor.py:109 | [p1-rag-evals_10:DocProcessingActor] Document index built successfully
+2026-04-30 17:30:11 | DocProcessingActor | INFO | doc_actor.py:134 | [p1-rag-evals_10:DocProcessingActor] Serializing FAISS index for cross-actor sharing...
+2026-04-30 17:30:11 | DocProcessingActor | INFO | doc_actor.py:144 | [p1-rag-evals_10:DocProcessingActor] FAISS index serialized: 245668 bytes
+2026-04-30 17:30:11 | DocProcessingActor | INFO | doc_actor.py:189 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor: Context components ready for sharing
+2026-04-30 17:30:17 | DocProcessingActor | INFO | doc_actor.py:109 | [p1-rag-evals_10:DocProcessingActor] Document index built successfully
+2026-04-30 17:30:17 | DocProcessingActor | INFO | doc_actor.py:134 | [p1-rag-evals_10:DocProcessingActor] Serializing FAISS index for cross-actor sharing...
+2026-04-30 17:30:17 | DocProcessingActor | INFO | doc_actor.py:144 | [p1-rag-evals_10:DocProcessingActor] FAISS index serialized: 505896 bytes
+2026-04-30 17:30:17 | DocProcessingActor | INFO | doc_actor.py:189 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor: Context components ready for sharing
+2026-04-30 17:30:17 | Controller | INFO | controller.py:482 | [p1-rag-evals_10:Controller] Built context 1 (608092d5...) successfully in 41.37s
+2026-04-30 17:30:17 | Controller | INFO | controller.py:482 | [p1-rag-evals_10:Controller] Built context 2 (6522fb50...) successfully in 41.38s
+2026-04-30 17:30:17 | Controller | INFO | controller.py:482 | [p1-rag-evals_10:Controller] Built context 3 (26707554...) successfully in 41.38s
+2026-04-30 17:30:17 | Controller | INFO | controller.py:482 | [p1-rag-evals_10:Controller] Built context 4 (2ad34c0d...) successfully in 41.38s
+2026-04-30 17:30:39 | DocProcessingActor | INFO | doc_actor.py:59 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor initialized
+2026-04-30 17:30:39 | DocProcessingActor | INFO | doc_actor.py:59 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor initialized
+2026-04-30 17:30:40 | DocProcessingActor | INFO | doc_actor.py:96 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor: Starting context initialization...
+2026-04-30 17:30:40 | DocProcessingActor | INFO | doc_actor.py:107 | [p1-rag-evals_10:DocProcessingActor] Building document index...
+2026-04-30 17:30:40 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from BAAI/bge-small-en-v1.5.
+2026-04-30 17:30:41 | DocProcessingActor | INFO | doc_actor.py:96 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor: Starting context initialization...
+2026-04-30 17:30:41 | DocProcessingActor | INFO | doc_actor.py:107 | [p1-rag-evals_10:DocProcessingActor] Building document index...
+2026-04-30 17:30:41 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from BAAI/bge-small-en-v1.5.
+2026-04-30 17:31:14 | DocProcessingActor | INFO | doc_actor.py:109 | [p1-rag-evals_10:DocProcessingActor] Document index built successfully
+2026-04-30 17:31:14 | DocProcessingActor | INFO | doc_actor.py:134 | [p1-rag-evals_10:DocProcessingActor] Serializing FAISS index for cross-actor sharing...
+2026-04-30 17:31:14 | DocProcessingActor | INFO | doc_actor.py:144 | [p1-rag-evals_10:DocProcessingActor] FAISS index serialized: 240640 bytes
+2026-04-30 17:31:14 | DocProcessingActor | INFO | doc_actor.py:189 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor: Context components ready for sharing
+2026-04-30 17:31:14 | Controller | INFO | controller.py:482 | [p1-rag-evals_10:Controller] Built context 5 (8a77f0fd...) successfully in 98.53s
+2026-04-30 17:31:17 | DocProcessingActor | INFO | doc_actor.py:109 | [p1-rag-evals_10:DocProcessingActor] Document index built successfully
+2026-04-30 17:31:17 | DocProcessingActor | INFO | doc_actor.py:134 | [p1-rag-evals_10:DocProcessingActor] Serializing FAISS index for cross-actor sharing...
+2026-04-30 17:31:17 | DocProcessingActor | INFO | doc_actor.py:144 | [p1-rag-evals_10:DocProcessingActor] FAISS index serialized: 522656 bytes
+2026-04-30 17:31:17 | DocProcessingActor | INFO | doc_actor.py:189 | [p1-rag-evals_10:DocProcessingActor] DocProcessingActor: Context components ready for sharing
+2026-04-30 17:31:17 | Controller | INFO | controller.py:482 | [p1-rag-evals_10:Controller] Built context 6 (908c3294...) successfully in 100.87s
+2026-04-30 17:31:17 | Controller | INFO | controller.py:523 | [p1-rag-evals_10:Controller] Completed parallel context building for 6 context(s)
+2026-04-30 17:31:17 | Controller | INFO | controller.py:920 | [p1-rag-evals_10:Controller] Created 8 query processing actors (generic pool)
+2026-04-30 17:31:17 | Experiment | INFO | metric_rfmetric_manager.py:141 | [p1-rag-evals_10:Experiment] Created MLflow run: 49a8c3a37e724c4e8842fecbe5ba69a2, 1
+2026-04-30 17:31:17 | Experiment | INFO | metric_rfmetric_manager.py:141 | [p1-rag-evals_10:Experiment] Created MLflow run: 07f465c5edb44dd4be9dc2877da51db5, 2
+2026-04-30 17:31:17 | Experiment | INFO | metric_rfmetric_manager.py:141 | [p1-rag-evals_10:Experiment] Created MLflow run: b77f2cbc9415422592eff4e95c9d613f, 3
+2026-04-30 17:31:17 | Experiment | INFO | metric_rfmetric_manager.py:141 | [p1-rag-evals_10:Experiment] Created MLflow run: f90e57bdc21d410ba057b03022378c83, 4
+2026-04-30 17:31:17 | Experiment | INFO | metric_rfmetric_manager.py:141 | [p1-rag-evals_10:Experiment] Created MLflow run: 458835f42205411f8579989cd6069344, 5
+2026-04-30 17:31:17 | Experiment | INFO | metric_rfmetric_manager.py:141 | [p1-rag-evals_10:Experiment] Created MLflow run: a5f1bc0db32042d1860efa02c843b3a6, 6
+2026-04-30 17:31:17 | Experiment | INFO | metric_rfmetric_manager.py:141 | [p1-rag-evals_10:Experiment] Created MLflow run: 3f5e44eb174f41589da2b5f45fb301e8, 7
+2026-04-30 17:31:17 | Experiment | INFO | metric_rfmetric_manager.py:141 | [p1-rag-evals_10:Experiment] Created MLflow run: 7fc25dfb77d7476a8918590af6e98c9f, 8
+2026-04-30 17:31:17 | Controller | INFO | controller.py:931 | [p1-rag-evals_10:Controller] Initialized scheduler with 8 pipelines, 8 actors, 4 shards
+2026-04-30 17:31:17 | Controller | INFO | controller.py:1118 | [p1-rag-evals_10:Controller] Created experiment-wide rate limiter actor for 8 OpenAI pipeline(s) with per-model limits (api-mistral-small-3.2-2506: 120 RPM, 1000000 TPM)
+2026-04-30 17:31:17 | Controller | INFO | controller.py:1124 | [p1-rag-evals_10:Controller] Starting multi-pipeline inference scheduling...
+2026-04-30 17:31:17 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 1 (Pipeline 1) on actor 0 for shard 0 (1 batches)
+2026-04-30 17:31:43 | QueryProcessingActor-0 | INFO | query_actor.py:165 | [p1-rag-evals_10:QueryProcessingActor-0] Initializing new inference engine (config hash: 190e7a05)
+2026-04-30 17:31:44 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:31:45 | QueryProcessingActor-0 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:31:45 | QueryProcessingActor-0 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-0] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:31:45 | QueryProcessingActor-0 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-0] Deserializing FAISS index for this actor...
+2026-04-30 17:31:45 | QueryProcessingActor-0 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-0] Created independent FAISS vector store for this actor
+2026-04-30 17:31:45 | QueryProcessingActor-0 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated retriever with search_type=similarity
+2026-04-30 17:31:45 | QueryProcessingActor-0 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated RAG spec with retrieval mode
+2026-04-30 17:31:45 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 2 (Pipeline 2) on actor 1 for shard 0 (1 batches)
+2026-04-30 17:31:45 | QueryProcessingActor-1 | INFO | query_actor.py:165 | [p1-rag-evals_10:QueryProcessingActor-1] Initializing new inference engine (config hash: 190e7a05)
+2026-04-30 17:31:46 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:31:48 | QueryProcessingActor-1 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:31:48 | QueryProcessingActor-1 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-1] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:31:48 | QueryProcessingActor-1 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-1] Deserializing FAISS index for this actor...
+2026-04-30 17:31:48 | QueryProcessingActor-1 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-1] Created independent FAISS vector store for this actor
+2026-04-30 17:31:48 | QueryProcessingActor-1 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated retriever with search_type=similarity
+2026-04-30 17:31:48 | QueryProcessingActor-1 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated RAG spec with retrieval mode
+2026-04-30 17:31:48 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 3 (Pipeline 3) on actor 2 for shard 0 (1 batches)
+2026-04-30 17:31:48 | QueryProcessingActor-2 | INFO | query_actor.py:165 | [p1-rag-evals_10:QueryProcessingActor-2] Initializing new inference engine (config hash: 190e7a05)
+2026-04-30 17:31:48 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:31:50 | QueryProcessingActor-2 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-2] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:31:50 | QueryProcessingActor-2 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-2] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:31:50 | QueryProcessingActor-2 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-2] Deserializing FAISS index for this actor...
+2026-04-30 17:31:50 | QueryProcessingActor-2 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-2] Created independent FAISS vector store for this actor
+2026-04-30 17:31:50 | QueryProcessingActor-2 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-2] Recreated retriever with search_type=similarity
+2026-04-30 17:31:50 | QueryProcessingActor-2 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-2] Recreated RAG spec with retrieval mode
+2026-04-30 17:31:50 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 4 (Pipeline 4) on actor 3 for shard 0 (1 batches)
+2026-04-30 17:31:50 | QueryProcessingActor-3 | INFO | query_actor.py:165 | [p1-rag-evals_10:QueryProcessingActor-3] Initializing new inference engine (config hash: 190e7a05)
+2026-04-30 17:31:50 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:31:52 | QueryProcessingActor-3 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-3] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:31:52 | QueryProcessingActor-3 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-3] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:31:52 | QueryProcessingActor-3 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-3] Deserializing FAISS index for this actor...
+2026-04-30 17:31:52 | QueryProcessingActor-3 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-3] Created independent FAISS vector store for this actor
+2026-04-30 17:31:52 | QueryProcessingActor-3 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-3] Recreated retriever with search_type=similarity
+2026-04-30 17:31:52 | QueryProcessingActor-3 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-3] Recreated RAG spec with retrieval mode
+2026-04-30 17:31:52 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 5 (Pipeline 5) on actor 4 for shard 0 (1 batches)
+2026-04-30 17:31:52 | QueryProcessingActor-4 | INFO | query_actor.py:165 | [p1-rag-evals_10:QueryProcessingActor-4] Initializing new inference engine (config hash: 190e7a05)
+2026-04-30 17:31:53 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:31:54 | QueryProcessingActor-4 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:31:54 | QueryProcessingActor-4 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-4] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:31:54 | QueryProcessingActor-4 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-4] Deserializing FAISS index for this actor...
+2026-04-30 17:31:54 | QueryProcessingActor-4 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-4] Created independent FAISS vector store for this actor
+2026-04-30 17:31:54 | QueryProcessingActor-4 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated retriever with search_type=similarity
+2026-04-30 17:31:54 | QueryProcessingActor-4 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated RAG spec with retrieval mode
+2026-04-30 17:31:54 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 6 (Pipeline 6) on actor 5 for shard 0 (1 batches)
+2026-04-30 17:31:55 | QueryProcessingActor-5 | INFO | query_actor.py:165 | [p1-rag-evals_10:QueryProcessingActor-5] Initializing new inference engine (config hash: 190e7a05)
+2026-04-30 17:31:55 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:31:57 | QueryProcessingActor-5 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-5] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:31:57 | QueryProcessingActor-5 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-5] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:31:57 | QueryProcessingActor-5 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-5] Deserializing FAISS index for this actor...
+2026-04-30 17:31:57 | QueryProcessingActor-5 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-5] Created independent FAISS vector store for this actor
+2026-04-30 17:31:57 | QueryProcessingActor-5 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-5] Recreated retriever with search_type=similarity
+2026-04-30 17:31:57 | QueryProcessingActor-5 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-5] Recreated RAG spec with retrieval mode
+2026-04-30 17:31:57 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 7 (Pipeline 7) on actor 6 for shard 0 (1 batches)
+2026-04-30 17:31:57 | QueryProcessingActor-6 | INFO | query_actor.py:165 | [p1-rag-evals_10:QueryProcessingActor-6] Initializing new inference engine (config hash: 190e7a05)
+2026-04-30 17:31:57 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from BAAI/bge-small-en-v1.5.
+2026-04-30 17:31:59 | QueryProcessingActor-6 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-6] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:31:59 | QueryProcessingActor-6 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-6] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:31:59 | QueryProcessingActor-6 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-6] Deserializing FAISS index for this actor...
+2026-04-30 17:31:59 | QueryProcessingActor-6 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-6] Created independent FAISS vector store for this actor
+2026-04-30 17:31:59 | QueryProcessingActor-6 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-6] Recreated retriever with search_type=similarity
+2026-04-30 17:31:59 | QueryProcessingActor-6 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-6] Recreated RAG spec with retrieval mode
+2026-04-30 17:31:59 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 1 completed shard 0 (1 batches, 13.58s)
+2026-04-30 17:31:59 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 8 (Pipeline 8) on actor 0 for shard 0 (1 batches)
+2026-04-30 17:31:59 | QueryProcessingActor-0 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-0] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:31:59 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from BAAI/bge-small-en-v1.5.
+2026-04-30 17:32:01 | QueryProcessingActor-0 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:01 | QueryProcessingActor-0 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-0] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:01 | QueryProcessingActor-0 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-0] Deserializing FAISS index for this actor...
+2026-04-30 17:32:01 | QueryProcessingActor-0 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-0] Created independent FAISS vector store for this actor
+2026-04-30 17:32:01 | QueryProcessingActor-0 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated retriever with search_type=similarity
+2026-04-30 17:32:01 | QueryProcessingActor-0 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:02 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 2 completed shard 0 (1 batches, 13.89s)
+2026-04-30 17:32:02 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 1 (Pipeline 1) on actor 1 for shard 1 (1 batches)
+2026-04-30 17:32:02 | QueryProcessingActor-1 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-1] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:02 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:04 | QueryProcessingActor-1 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:04 | QueryProcessingActor-1 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-1] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:04 | QueryProcessingActor-1 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-1] Deserializing FAISS index for this actor...
+2026-04-30 17:32:04 | QueryProcessingActor-1 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-1] Created independent FAISS vector store for this actor
+2026-04-30 17:32:04 | QueryProcessingActor-1 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated retriever with search_type=similarity
+2026-04-30 17:32:04 | QueryProcessingActor-1 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:04 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 3 completed shard 0 (1 batches, 13.90s)
+2026-04-30 17:32:04 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 2 (Pipeline 2) on actor 2 for shard 1 (1 batches)
+2026-04-30 17:32:04 | QueryProcessingActor-2 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-2] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:04 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:06 | QueryProcessingActor-2 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-2] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:06 | QueryProcessingActor-2 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-2] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:06 | QueryProcessingActor-2 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-2] Deserializing FAISS index for this actor...
+2026-04-30 17:32:06 | QueryProcessingActor-2 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-2] Created independent FAISS vector store for this actor
+2026-04-30 17:32:06 | QueryProcessingActor-2 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-2] Recreated retriever with search_type=similarity
+2026-04-30 17:32:06 | QueryProcessingActor-2 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-2] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:06 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 4 completed shard 0 (1 batches, 13.73s)
+2026-04-30 17:32:06 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 5 completed shard 0 (1 batches, 11.76s)
+2026-04-30 17:32:06 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 3 (Pipeline 3) on actor 3 for shard 1 (1 batches)
+2026-04-30 17:32:06 | QueryProcessingActor-3 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-3] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:07 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:08 | QueryProcessingActor-3 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-3] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:08 | QueryProcessingActor-3 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-3] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:08 | QueryProcessingActor-3 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-3] Deserializing FAISS index for this actor...
+2026-04-30 17:32:08 | QueryProcessingActor-3 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-3] Created independent FAISS vector store for this actor
+2026-04-30 17:32:08 | QueryProcessingActor-3 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-3] Recreated retriever with search_type=similarity
+2026-04-30 17:32:08 | QueryProcessingActor-3 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-3] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:09 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 6 completed shard 0 (1 batches, 11.74s)
+2026-04-30 17:32:09 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 4 (Pipeline 4) on actor 4 for shard 1 (1 batches)
+2026-04-30 17:32:09 | QueryProcessingActor-4 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-4] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:09 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:10 | QueryProcessingActor-4 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:10 | QueryProcessingActor-4 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-4] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:10 | QueryProcessingActor-4 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-4] Deserializing FAISS index for this actor...
+2026-04-30 17:32:10 | QueryProcessingActor-4 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-4] Created independent FAISS vector store for this actor
+2026-04-30 17:32:10 | QueryProcessingActor-4 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated retriever with search_type=similarity
+2026-04-30 17:32:10 | QueryProcessingActor-4 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:10 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 5 (Pipeline 5) on actor 5 for shard 1 (1 batches)
+2026-04-30 17:32:10 | QueryProcessingActor-5 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-5] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:11 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:13 | QueryProcessingActor-5 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-5] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:13 | QueryProcessingActor-5 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-5] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:13 | QueryProcessingActor-5 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-5] Deserializing FAISS index for this actor...
+2026-04-30 17:32:13 | QueryProcessingActor-5 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-5] Created independent FAISS vector store for this actor
+2026-04-30 17:32:13 | QueryProcessingActor-5 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-5] Recreated retriever with search_type=similarity
+2026-04-30 17:32:13 | QueryProcessingActor-5 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-5] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:13 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 7 completed shard 0 (1 batches, 13.61s)
+2026-04-30 17:32:13 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 8 completed shard 0 (1 batches, 11.53s)
+2026-04-30 17:32:13 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 6 (Pipeline 6) on actor 0 for shard 1 (1 batches)
+2026-04-30 17:32:13 | QueryProcessingActor-0 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-0] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:13 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:15 | QueryProcessingActor-0 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:15 | QueryProcessingActor-0 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-0] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:15 | QueryProcessingActor-0 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-0] Deserializing FAISS index for this actor...
+2026-04-30 17:32:15 | QueryProcessingActor-0 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-0] Created independent FAISS vector store for this actor
+2026-04-30 17:32:15 | QueryProcessingActor-0 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated retriever with search_type=similarity
+2026-04-30 17:32:15 | QueryProcessingActor-0 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:15 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 7 (Pipeline 7) on actor 6 for shard 1 (1 batches)
+2026-04-30 17:32:15 | QueryProcessingActor-6 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-6] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:15 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from BAAI/bge-small-en-v1.5.
+2026-04-30 17:32:17 | QueryProcessingActor-6 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-6] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:17 | QueryProcessingActor-6 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-6] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:17 | QueryProcessingActor-6 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-6] Deserializing FAISS index for this actor...
+2026-04-30 17:32:17 | QueryProcessingActor-6 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-6] Created independent FAISS vector store for this actor
+2026-04-30 17:32:17 | QueryProcessingActor-6 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-6] Recreated retriever with search_type=similarity
+2026-04-30 17:32:17 | QueryProcessingActor-6 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-6] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:17 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 8 (Pipeline 8) on actor 7 for shard 1 (1 batches)
+2026-04-30 17:32:17 | QueryProcessingActor-7 | INFO | query_actor.py:165 | [p1-rag-evals_10:QueryProcessingActor-7] Initializing new inference engine (config hash: 190e7a05)
+2026-04-30 17:32:17 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from BAAI/bge-small-en-v1.5.
+2026-04-30 17:32:19 | QueryProcessingActor-7 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-7] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:19 | QueryProcessingActor-7 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-7] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:19 | QueryProcessingActor-7 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-7] Deserializing FAISS index for this actor...
+2026-04-30 17:32:19 | QueryProcessingActor-7 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-7] Created independent FAISS vector store for this actor
+2026-04-30 17:32:19 | QueryProcessingActor-7 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-7] Recreated retriever with search_type=similarity
+2026-04-30 17:32:19 | QueryProcessingActor-7 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-7] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:19 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 1 completed shard 1 (1 batches, 15.42s)
+2026-04-30 17:32:19 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 2 completed shard 1 (1 batches, 13.41s)
+2026-04-30 17:32:19 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 1 (Pipeline 1) on actor 1 for shard 2 (1 batches)
+2026-04-30 17:32:19 | QueryProcessingActor-1 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-1] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:20 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:22 | QueryProcessingActor-1 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:22 | QueryProcessingActor-1 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-1] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:22 | QueryProcessingActor-1 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-1] Deserializing FAISS index for this actor...
+2026-04-30 17:32:22 | QueryProcessingActor-1 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-1] Created independent FAISS vector store for this actor
+2026-04-30 17:32:22 | QueryProcessingActor-1 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated retriever with search_type=similarity
+2026-04-30 17:32:22 | QueryProcessingActor-1 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:22 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 2 (Pipeline 2) on actor 2 for shard 2 (1 batches)
+2026-04-30 17:32:22 | QueryProcessingActor-2 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-2] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:22 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:24 | QueryProcessingActor-2 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-2] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:24 | QueryProcessingActor-2 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-2] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:24 | QueryProcessingActor-2 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-2] Deserializing FAISS index for this actor...
+2026-04-30 17:32:24 | QueryProcessingActor-2 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-2] Created independent FAISS vector store for this actor
+2026-04-30 17:32:24 | QueryProcessingActor-2 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-2] Recreated retriever with search_type=similarity
+2026-04-30 17:32:24 | QueryProcessingActor-2 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-2] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:24 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 3 completed shard 1 (1 batches, 15.31s)
+2026-04-30 17:32:24 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 4 completed shard 1 (1 batches, 13.45s)
+2026-04-30 17:32:24 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 3 (Pipeline 3) on actor 3 for shard 2 (1 batches)
+2026-04-30 17:32:24 | QueryProcessingActor-3 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-3] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:24 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:26 | QueryProcessingActor-3 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-3] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:26 | QueryProcessingActor-3 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-3] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:26 | QueryProcessingActor-3 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-3] Deserializing FAISS index for this actor...
+2026-04-30 17:32:26 | QueryProcessingActor-3 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-3] Created independent FAISS vector store for this actor
+2026-04-30 17:32:26 | QueryProcessingActor-3 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-3] Recreated retriever with search_type=similarity
+2026-04-30 17:32:26 | QueryProcessingActor-3 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-3] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:26 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 5 completed shard 1 (1 batches, 13.55s)
+2026-04-30 17:32:26 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 4 (Pipeline 4) on actor 4 for shard 2 (1 batches)
+2026-04-30 17:32:26 | QueryProcessingActor-4 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-4] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:26 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:28 | QueryProcessingActor-4 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:28 | QueryProcessingActor-4 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-4] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:28 | QueryProcessingActor-4 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-4] Deserializing FAISS index for this actor...
+2026-04-30 17:32:28 | QueryProcessingActor-4 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-4] Created independent FAISS vector store for this actor
+2026-04-30 17:32:28 | QueryProcessingActor-4 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated retriever with search_type=similarity
+2026-04-30 17:32:28 | QueryProcessingActor-4 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:28 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 5 (Pipeline 5) on actor 5 for shard 2 (1 batches)
+2026-04-30 17:32:28 | QueryProcessingActor-5 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-5] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:28 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:30 | QueryProcessingActor-5 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-5] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:30 | QueryProcessingActor-5 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-5] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:30 | QueryProcessingActor-5 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-5] Deserializing FAISS index for this actor...
+2026-04-30 17:32:30 | QueryProcessingActor-5 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-5] Created independent FAISS vector store for this actor
+2026-04-30 17:32:30 | QueryProcessingActor-5 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-5] Recreated retriever with search_type=similarity
+2026-04-30 17:32:30 | QueryProcessingActor-5 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-5] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:30 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 6 completed shard 1 (1 batches, 15.10s)
+2026-04-30 17:32:30 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 6 (Pipeline 6) on actor 0 for shard 2 (1 batches)
+2026-04-30 17:32:30 | QueryProcessingActor-0 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-0] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:30 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:32 | QueryProcessingActor-0 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:32 | QueryProcessingActor-0 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-0] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:32 | QueryProcessingActor-0 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-0] Deserializing FAISS index for this actor...
+2026-04-30 17:32:32 | QueryProcessingActor-0 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-0] Created independent FAISS vector store for this actor
+2026-04-30 17:32:32 | QueryProcessingActor-0 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated retriever with search_type=similarity
+2026-04-30 17:32:32 | QueryProcessingActor-0 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:32 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 7 completed shard 1 (1 batches, 15.25s)
+2026-04-30 17:32:32 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 7 (Pipeline 7) on actor 6 for shard 2 (1 batches)
+2026-04-30 17:32:32 | QueryProcessingActor-6 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-6] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:33 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from BAAI/bge-small-en-v1.5.
+2026-04-30 17:32:34 | QueryProcessingActor-6 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-6] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:34 | QueryProcessingActor-6 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-6] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:34 | QueryProcessingActor-6 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-6] Deserializing FAISS index for this actor...
+2026-04-30 17:32:34 | QueryProcessingActor-6 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-6] Created independent FAISS vector store for this actor
+2026-04-30 17:32:34 | QueryProcessingActor-6 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-6] Recreated retriever with search_type=similarity
+2026-04-30 17:32:34 | QueryProcessingActor-6 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-6] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:34 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 8 completed shard 1 (1 batches, 15.08s)
+2026-04-30 17:32:35 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 1 completed shard 2 (1 batches, 12.81s)
+2026-04-30 17:32:35 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 8 (Pipeline 8) on actor 1 for shard 2 (1 batches)
+2026-04-30 17:32:35 | QueryProcessingActor-1 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-1] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:35 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from BAAI/bge-small-en-v1.5.
+2026-04-30 17:32:36 | QueryProcessingActor-1 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:36 | QueryProcessingActor-1 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-1] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:36 | QueryProcessingActor-1 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-1] Deserializing FAISS index for this actor...
+2026-04-30 17:32:36 | QueryProcessingActor-1 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-1] Created independent FAISS vector store for this actor
+2026-04-30 17:32:36 | QueryProcessingActor-1 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated retriever with search_type=similarity
+2026-04-30 17:32:36 | QueryProcessingActor-1 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:36 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 1 (Pipeline 1) on actor 7 for shard 3 (1 batches)
+2026-04-30 17:32:36 | QueryProcessingActor-7 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-7] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:37 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:39 | QueryProcessingActor-7 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-7] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:39 | QueryProcessingActor-7 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-7] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:39 | QueryProcessingActor-7 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-7] Deserializing FAISS index for this actor...
+2026-04-30 17:32:39 | QueryProcessingActor-7 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-7] Created independent FAISS vector store for this actor
+2026-04-30 17:32:39 | QueryProcessingActor-7 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-7] Recreated retriever with search_type=similarity
+2026-04-30 17:32:39 | QueryProcessingActor-7 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-7] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:39 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 2 completed shard 2 (1 batches, 14.94s)
+2026-04-30 17:32:39 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 3 completed shard 2 (1 batches, 12.73s)
+2026-04-30 17:32:39 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 2 (Pipeline 2) on actor 2 for shard 3 (1 batches)
+2026-04-30 17:32:39 | QueryProcessingActor-2 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-2] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:39 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:41 | QueryProcessingActor-2 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-2] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:41 | QueryProcessingActor-2 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-2] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:41 | QueryProcessingActor-2 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-2] Deserializing FAISS index for this actor...
+2026-04-30 17:32:41 | QueryProcessingActor-2 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-2] Created independent FAISS vector store for this actor
+2026-04-30 17:32:41 | QueryProcessingActor-2 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-2] Recreated retriever with search_type=similarity
+2026-04-30 17:32:41 | QueryProcessingActor-2 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-2] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:41 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 4 completed shard 2 (1 batches, 12.64s)
+2026-04-30 17:32:41 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 5 completed shard 2 (1 batches, 10.92s)
+2026-04-30 17:32:41 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 3 (Pipeline 3) on actor 3 for shard 3 (1 batches)
+2026-04-30 17:32:41 | QueryProcessingActor-3 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-3] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:41 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:43 | QueryProcessingActor-3 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-3] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:43 | QueryProcessingActor-3 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-3] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:43 | QueryProcessingActor-3 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-3] Deserializing FAISS index for this actor...
+2026-04-30 17:32:43 | QueryProcessingActor-3 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-3] Created independent FAISS vector store for this actor
+2026-04-30 17:32:43 | QueryProcessingActor-3 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-3] Recreated retriever with search_type=similarity
+2026-04-30 17:32:43 | QueryProcessingActor-3 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-3] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:43 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 4 (Pipeline 4) on actor 4 for shard 3 (1 batches)
+2026-04-30 17:32:43 | QueryProcessingActor-4 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-4] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:43 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:45 | QueryProcessingActor-4 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:45 | QueryProcessingActor-4 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-4] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:45 | QueryProcessingActor-4 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-4] Deserializing FAISS index for this actor...
+2026-04-30 17:32:45 | QueryProcessingActor-4 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-4] Created independent FAISS vector store for this actor
+2026-04-30 17:32:45 | QueryProcessingActor-4 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated retriever with search_type=similarity
+2026-04-30 17:32:45 | QueryProcessingActor-4 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:45 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 5 (Pipeline 5) on actor 5 for shard 3 (1 batches)
+2026-04-30 17:32:45 | QueryProcessingActor-5 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-5] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:32:45 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:32:47 | QueryProcessingActor-5 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-5] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:32:47 | QueryProcessingActor-5 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-5] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:32:47 | QueryProcessingActor-5 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-5] Deserializing FAISS index for this actor...
+2026-04-30 17:32:47 | QueryProcessingActor-5 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-5] Created independent FAISS vector store for this actor
+2026-04-30 17:32:47 | QueryProcessingActor-5 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-5] Recreated retriever with search_type=similarity
+2026-04-30 17:32:47 | QueryProcessingActor-5 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-5] Recreated RAG spec with retrieval mode
+2026-04-30 17:32:57 | Controller | INFO | controller.py:1192 | [p1-rag-evals_10:Controller] Pipeline 4 completed all 4 shards
+2026-04-30 17:32:57 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 4 completed shard 3 (1 batches, 11.45s)
+2026-04-30 17:33:00 | Controller | INFO | controller.py:1192 | [p1-rag-evals_10:Controller] Pipeline 5 completed all 4 shards
+2026-04-30 17:33:00 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 5 completed shard 3 (1 batches, 13.24s)
+2026-04-30 17:33:06 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 7 completed shard 2 (1 batches, 31.25s)
+2026-04-30 17:33:06 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 7 (Pipeline 7) on actor 4 for shard 3 (1 batches)
+2026-04-30 17:33:06 | QueryProcessingActor-4 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-4] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:33:06 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from BAAI/bge-small-en-v1.5.
+2026-04-30 17:33:08 | QueryProcessingActor-4 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:33:08 | QueryProcessingActor-4 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-4] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:33:08 | QueryProcessingActor-4 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-4] Deserializing FAISS index for this actor...
+2026-04-30 17:33:08 | QueryProcessingActor-4 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-4] Created independent FAISS vector store for this actor
+2026-04-30 17:33:08 | QueryProcessingActor-4 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated retriever with search_type=similarity
+2026-04-30 17:33:08 | QueryProcessingActor-4 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-4] Recreated RAG spec with retrieval mode
+2026-04-30 17:33:08 | Controller | INFO | controller.py:1192 | [p1-rag-evals_10:Controller] Pipeline 2 completed all 4 shards
+2026-04-30 17:33:08 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 2 completed shard 3 (1 batches, 27.30s)
+2026-04-30 17:33:10 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 8 completed shard 2 (1 batches, 33.83s)
+2026-04-30 17:33:10 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 8 (Pipeline 8) on actor 1 for shard 3 (1 batches)
+2026-04-30 17:33:10 | QueryProcessingActor-1 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-1] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:33:11 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from BAAI/bge-small-en-v1.5.
+2026-04-30 17:33:12 | QueryProcessingActor-1 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:33:12 | QueryProcessingActor-1 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-1] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:33:12 | QueryProcessingActor-1 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-1] Deserializing FAISS index for this actor...
+2026-04-30 17:33:12 | QueryProcessingActor-1 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-1] Created independent FAISS vector store for this actor
+2026-04-30 17:33:12 | QueryProcessingActor-1 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated retriever with search_type=similarity
+2026-04-30 17:33:12 | QueryProcessingActor-1 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-1] Recreated RAG spec with retrieval mode
+2026-04-30 17:33:13 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 6 completed shard 2 (1 batches, 40.24s)
+2026-04-30 17:33:13 | Controller | INFO | controller.py:1192 | [p1-rag-evals_10:Controller] Pipeline 3 completed all 4 shards
+2026-04-30 17:33:13 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 3 completed shard 3 (1 batches, 29.51s)
+2026-04-30 17:33:13 | Controller | INFO | controller.py:1422 | [p1-rag-evals_10:Controller] Scheduling pipeline 6 (Pipeline 6) on actor 0 for shard 3 (1 batches)
+2026-04-30 17:33:13 | QueryProcessingActor-0 | INFO | query_actor.py:169 | [p1-rag-evals_10:QueryProcessingActor-0] Reusing existing inference engine (config hash: 190e7a05)
+2026-04-30 17:33:13 | sentence_transformers.base.model | INFO | model.py:973 | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-30 17:33:15 | QueryProcessingActor-0 | INFO | query_actor.py:198 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated embedding function: HuggingFaceEmbeddings
+2026-04-30 17:33:15 | QueryProcessingActor-0 | INFO | query_actor.py:211 | [p1-rag-evals_10:QueryProcessingActor-0] Using CPU-based FAISS for retrieval (avoids GPU memory conflicts)
+2026-04-30 17:33:15 | QueryProcessingActor-0 | INFO | query_actor.py:215 | [p1-rag-evals_10:QueryProcessingActor-0] Deserializing FAISS index for this actor...
+2026-04-30 17:33:15 | QueryProcessingActor-0 | INFO | query_actor.py:230 | [p1-rag-evals_10:QueryProcessingActor-0] Created independent FAISS vector store for this actor
+2026-04-30 17:33:15 | QueryProcessingActor-0 | INFO | query_actor.py:260 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated retriever with search_type=similarity
+2026-04-30 17:33:15 | QueryProcessingActor-0 | INFO | query_actor.py:277 | [p1-rag-evals_10:QueryProcessingActor-0] Recreated RAG spec with retrieval mode
+2026-04-30 17:33:15 | Controller | INFO | controller.py:1192 | [p1-rag-evals_10:Controller] Pipeline 1 completed all 4 shards
+2026-04-30 17:33:15 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 1 completed shard 3 (1 batches, 36.20s)
+2026-04-30 17:33:19 | Controller | INFO | controller.py:1192 | [p1-rag-evals_10:Controller] Pipeline 7 completed all 4 shards
+2026-04-30 17:33:19 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 7 completed shard 3 (1 batches, 11.44s)
+2026-04-30 17:33:23 | Controller | INFO | controller.py:1192 | [p1-rag-evals_10:Controller] Pipeline 8 completed all 4 shards
+2026-04-30 17:33:23 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 8 completed shard 3 (1 batches, 10.37s)
+2026-04-30 17:33:25 | Controller | INFO | controller.py:1192 | [p1-rag-evals_10:Controller] Pipeline 6 completed all 4 shards
+2026-04-30 17:33:26 | Controller | INFO | controller.py:1299 | [p1-rag-evals_10:Controller] Pipeline 6 completed shard 3 (1 batches, 10.60s)
+2026-04-30 17:33:26 | Controller | INFO | controller.py:1386 | [p1-rag-evals_10:Controller] All pipelines completed all shards!
+2026-04-30 17:33:26 | Controller | INFO | controller.py:695 | [p1-rag-evals_10:Controller] Computing final metrics for all pipelines...
+2026-04-30 17:33:26 | Experiment | INFO | metric_rfmetric_manager.py:190 | [p1-rag-evals_10:Experiment] Ending run: 49a8c3a37e724c4e8842fecbe5ba69a2, 1 in rf_mlflow
+2026-04-30 17:33:26 | Experiment | WARNING | metric_mlflow_manager.py:101 | [p1-rag-evals_10:Experiment] Run 49a8c3a37e724c4e8842fecbe5ba69a2 is not the active run, no local context to clear
+2026-04-30 17:33:26 | Controller | INFO | controller.py:853 | [p1-rag-evals_10:Controller] Pipeline 1 (Pipeline 1) completed successfully
+2026-04-30 17:33:26 | Experiment | INFO | metric_rfmetric_manager.py:190 | [p1-rag-evals_10:Experiment] Ending run: 07f465c5edb44dd4be9dc2877da51db5, 2 in rf_mlflow
+2026-04-30 17:33:26 | Experiment | WARNING | metric_mlflow_manager.py:101 | [p1-rag-evals_10:Experiment] Run 07f465c5edb44dd4be9dc2877da51db5 is not the active run, no local context to clear
+2026-04-30 17:33:26 | Controller | INFO | controller.py:853 | [p1-rag-evals_10:Controller] Pipeline 2 (Pipeline 2) completed successfully
+2026-04-30 17:33:26 | Experiment | INFO | metric_rfmetric_manager.py:190 | [p1-rag-evals_10:Experiment] Ending run: b77f2cbc9415422592eff4e95c9d613f, 3 in rf_mlflow
+2026-04-30 17:33:26 | Experiment | WARNING | metric_mlflow_manager.py:101 | [p1-rag-evals_10:Experiment] Run b77f2cbc9415422592eff4e95c9d613f is not the active run, no local context to clear
+2026-04-30 17:33:26 | Controller | INFO | controller.py:853 | [p1-rag-evals_10:Controller] Pipeline 3 (Pipeline 3) completed successfully
+2026-04-30 17:33:26 | Experiment | INFO | metric_rfmetric_manager.py:190 | [p1-rag-evals_10:Experiment] Ending run: f90e57bdc21d410ba057b03022378c83, 4 in rf_mlflow
+2026-04-30 17:33:26 | Experiment | WARNING | metric_mlflow_manager.py:101 | [p1-rag-evals_10:Experiment] Run f90e57bdc21d410ba057b03022378c83 is not the active run, no local context to clear
+2026-04-30 17:33:26 | Controller | INFO | controller.py:853 | [p1-rag-evals_10:Controller] Pipeline 4 (Pipeline 4) completed successfully
+2026-04-30 17:33:27 | Experiment | INFO | metric_rfmetric_manager.py:190 | [p1-rag-evals_10:Experiment] Ending run: 458835f42205411f8579989cd6069344, 5 in rf_mlflow
+2026-04-30 17:33:27 | Experiment | WARNING | metric_mlflow_manager.py:101 | [p1-rag-evals_10:Experiment] Run 458835f42205411f8579989cd6069344 is not the active run, no local context to clear
+2026-04-30 17:33:27 | Controller | INFO | controller.py:853 | [p1-rag-evals_10:Controller] Pipeline 5 (Pipeline 5) completed successfully
+2026-04-30 17:33:27 | Experiment | INFO | metric_rfmetric_manager.py:190 | [p1-rag-evals_10:Experiment] Ending run: a5f1bc0db32042d1860efa02c843b3a6, 6 in rf_mlflow
+2026-04-30 17:33:27 | Experiment | WARNING | metric_mlflow_manager.py:101 | [p1-rag-evals_10:Experiment] Run a5f1bc0db32042d1860efa02c843b3a6 is not the active run, no local context to clear
+2026-04-30 17:33:27 | Controller | INFO | controller.py:853 | [p1-rag-evals_10:Controller] Pipeline 6 (Pipeline 6) completed successfully
+2026-04-30 17:33:27 | Experiment | INFO | metric_rfmetric_manager.py:190 | [p1-rag-evals_10:Experiment] Ending run: 3f5e44eb174f41589da2b5f45fb301e8, 7 in rf_mlflow
+2026-04-30 17:33:27 | Experiment | WARNING | metric_mlflow_manager.py:101 | [p1-rag-evals_10:Experiment] Run 3f5e44eb174f41589da2b5f45fb301e8 is not the active run, no local context to clear
+2026-04-30 17:33:27 | Controller | INFO | controller.py:853 | [p1-rag-evals_10:Controller] Pipeline 7 (Pipeline 7) completed successfully
+2026-04-30 17:33:27 | Experiment | INFO | metric_rfmetric_manager.py:190 | [p1-rag-evals_10:Experiment] Ending run: 7fc25dfb77d7476a8918590af6e98c9f, 8 in rf_mlflow
+2026-04-30 17:33:27 | Experiment | WARNING | metric_mlflow_manager.py:101 | [p1-rag-evals_10:Experiment] Run 7fc25dfb77d7476a8918590af6e98c9f is not the active run, no local context to clear
+2026-04-30 17:33:27 | Controller | INFO | controller.py:853 | [p1-rag-evals_10:Controller] Pipeline 8 (Pipeline 8) completed successfully
+2026-04-30 17:33:28 | ExperimentUtils | INFO | experiment_utils.py:180 | [p1-rag-evals_10:ExperimentUtils] Reset experiment states - marked ongoing pipelines, contexts, and tasks as failed
+2026-04-30 17:33:28 | ExperimentUtils | INFO | experiment_utils.py:188 | [p1-rag-evals_10:ExperimentUtils] Experiment marked as cancelled. Ongoing pipelines, contexts, and tasks have been marked as failed.
+2026-04-30 17:33:28 | ExperimentUtils | INFO | experiment_utils.py:154 | [p1-rag-evals_10:ExperimentUtils] Experiment p1-rag-evals_10 ended
+2026-04-30 17:33:30 | Experiment | INFO | experiment.py:574 | [p1-rag-evals_10:Experiment] All actors shut down
+2026-04-30 17:33:30 | Experiment | INFO | experiment.py:575 | [p1-rag-evals_10:Experiment] Dispatcher will automatically shut down (daemon thread)
